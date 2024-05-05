@@ -133,9 +133,7 @@ public abstract class Menu {
             setup = true;
         }
 
-        handler.runAsync(() -> {
-            update();
-
+        update(() -> {
             handler.runSync(() -> {
                 player.openInventory(inventory);
                 onOpen();
@@ -150,29 +148,31 @@ public abstract class Menu {
      * also updating the indexes of pagination buttons if present.
      */
     public void update(Runnable callback) {
-        lastUpdate = handler.getTicks();
+        handler.runAsync(() -> {
+            lastUpdate = handler.getTicks();
 
-        buttons.clear();
-        buttons.putAll(buttonCache);
+            buttons.clear();
+            buttons.putAll(buttonCache);
 
-        ItemStack[] items = new ItemStack[getMaxSlots()];
+            ItemStack[] items = new ItemStack[getMaxSlots()];
 
-        int paginationButtons = 0;
+            int paginationButtons = 0;
 
-        for (Map.Entry<Integer, Button> entry : buttons.entrySet()) {
-            Button button = entry.getValue();
+            for (Map.Entry<Integer, Button> entry : buttons.entrySet()) {
+                Button button = entry.getValue();
 
-            if (button instanceof PaginationButton) {
-                ((PaginationButton) button).setIndex(++paginationButtons);
+                if (button instanceof PaginationButton) {
+                    ((PaginationButton) button).setIndex(++paginationButtons);
+                }
+
+                items[entry.getKey()] = button.getItem(player);
             }
 
-            items[entry.getKey()] = button.getItem(player);
-        }
+            inventory.setContents(items);
+            handler.runSync(player::updateInventory);
 
-        inventory.setContents(items);
-        handler.runSync(player::updateInventory);
-
-        if (callback != null) callback.run();
+            if (callback != null) callback.run();
+        });
     }
 
     /**
