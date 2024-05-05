@@ -47,6 +47,7 @@ public abstract class Menu {
         );
     }
 
+    public void setupButtons() { }
     public void onOpen() { }
     public void onClose() { }
 
