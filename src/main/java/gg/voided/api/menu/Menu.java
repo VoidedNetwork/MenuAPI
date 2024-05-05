@@ -128,6 +128,8 @@ public abstract class Menu {
      * Opens the menu, setting up the buttons if they haven't been set up.
      */
     public void open() {
+        if (hasPreviousMenu()) previousMenu.close();
+
         if (!setup) {
             setupButtons();
             setup = true;
@@ -229,7 +231,7 @@ public abstract class Menu {
      */
     public void add(Button button) {
         for (int i = 0; i < getMaxSlots(); i++) {
-            if (buttons.get(i) != null) continue;
+            if (buttonCache.get(i) != null) continue;
 
             set(i, button);
             return;
