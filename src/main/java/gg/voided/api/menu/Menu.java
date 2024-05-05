@@ -14,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * A wrapper around a bukkit inventory with extra functionality
  * which stores items as buttons and keeps track of previous menus.
@@ -167,6 +166,7 @@ public abstract class Menu {
                     ((PaginationButton) button).setIndex(++paginationButtons);
                 }
 
+                if (entry.getKey() > items.length) continue;
                 items[entry.getKey()] = button.getItem(player);
             }
 
