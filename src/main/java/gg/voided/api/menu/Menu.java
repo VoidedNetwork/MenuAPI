@@ -32,6 +32,10 @@ public abstract class Menu {
     private long lastUpdate = 0;
 
     public Menu(String title, MenuSize size, Player player) {
+        MenuHandler handler = MenuHandler.getInstance();
+        if (handler == null) throw new IllegalStateException("Please initialize the MenuHandler before creating a menu.");
+        this.handler = handler;
+
         this.title = title;
         this.rows = size.getRows();
         this.player = player;
