@@ -171,9 +171,11 @@ public abstract class Menu {
             }
 
             inventory.setContents(items);
-            handler.runSync(player::updateInventory);
 
-            if (callback != null) callback.run();
+            handler.runSync(() -> {
+                player.updateInventory();
+                if (callback != null) callback.run();
+            });
         });
     }
 
