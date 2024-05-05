@@ -128,12 +128,12 @@ public abstract class Menu {
      * Opens the menu, setting up the buttons if they haven't been set up.
      */
     public void open() {
-        handler.runAsync(() -> {
-            if (!setup) {
-                setupButtons();
-                setup = true;
-            }
+        if (!setup) {
+            setupButtons();
+            setup = true;
+        }
 
+        handler.runAsync(() -> {
             update();
 
             handler.runSync(() -> {
@@ -149,7 +149,7 @@ public abstract class Menu {
      * Updates the underlying inventory with the button's item stacks,
      * also updating the indexes of pagination buttons if present.
      */
-    public void update() {
+    public void update(Runnable callback) {
         lastUpdate = handler.getTicks();
 
         buttons.clear();
@@ -171,6 +171,16 @@ public abstract class Menu {
 
         inventory.setContents(items);
         handler.runSync(player::updateInventory);
+
+        if (callback != null) callback.run();
+    }
+
+    /**
+     * Updates the underlying inventory with the button's item stacks,
+     * also updating the indexes of pagination buttons if present.
+     */
+    public void update() {
+        update(null);
     }
 
     /**
