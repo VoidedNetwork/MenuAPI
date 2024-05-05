@@ -115,4 +115,22 @@ public abstract class PaginatedMenu extends Menu {
     public int getPageIndex() {
         return page - 1;
     }
+
+    /**
+     * Checks if there is a next page.
+     *
+     * @return If there is a next page.
+     */
+    public boolean hasNextPage() {
+        return page < getTotalPages();
+    }
+
+    /**
+     * Checks if there is a previous page.
+     *
+     * @return If there is a previous page.
+     */
+    public boolean hasPreviousPage() {
+        return page > 1;
+    }
 }
