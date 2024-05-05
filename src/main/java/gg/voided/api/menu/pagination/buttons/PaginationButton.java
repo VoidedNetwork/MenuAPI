@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
  * @since 5/05/2024
  */
 @RequiredArgsConstructor
-public class PaginationButton extends Button {
+public final class PaginationButton extends Button {
     /**
      * The pagination menu associated with the button.
      */
