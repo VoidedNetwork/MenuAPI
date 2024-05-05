@@ -8,10 +8,27 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+/**
+ * Handles inventory clicks, sending
+ * them to the corresponding menu.
+ *
+ * @author J4C0B3Y
+ * @version MenuAPI
+ * @since 5/05/2024
+ */
 @RequiredArgsConstructor
 public class ClickListener implements Listener {
+    /**
+     * The listener's menu handler.
+     */
     private final MenuHandler handler;
 
+    /**
+     * Sends a click event to a player's menu if they have one
+     * open, cancelling the click, so they can't pick up the item.
+     *
+     * @param event The click event.
+     */
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) return;

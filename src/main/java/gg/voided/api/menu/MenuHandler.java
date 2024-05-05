@@ -13,17 +13,52 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Stores open menus, menu options, registers listeners
+ * and starts tasks for the menus to function.
+ *
+ * @author J4C0B3Y
+ * @version MenuAPI
+ * @since 5/05/2024
+ */
 @Getter @Setter
 public class MenuHandler {
     @Getter private static MenuHandler instance;
-    private final Map<Player, Menu> openedMenus = new ConcurrentHashMap<>();
+
+    /**
+     * The plugin to register listeners with.
+     */
     private final JavaPlugin plugin;
 
+    /**
+     * Stores players that have open menus.
+     */
+    private final Map<Player, Menu> openedMenus = new ConcurrentHashMap<>();
+
+
+    /**
+     * Weather the menu should close when the back method
+     * is called if there is no previous menu.
+     */
     private boolean closeOnBack = false;
+
+    /**
+     * Weather the pagination ignore duplicate button entries.
+     */
     private boolean uniquePaginationEntries = false;
 
+    /**
+     * A tick timer used internally for auto updating,
+     * this should not be modified.
+     */
     private long ticks = 0;
 
+    /**
+     * Creates a new menu handler,
+     * registering listeners and tasks.
+     *
+     * @param plugin The plugin to register listeners with.
+     */
     public MenuHandler(JavaPlugin plugin) {
         instance = this;
         this.plugin = plugin;
@@ -32,10 +67,20 @@ public class MenuHandler {
         startTasks();
     }
 
+    /**
+     * Runs a task on the main thread for bukkit.
+     *
+     * @param task The task to run.
+     */
     protected void runSync(Runnable task) {
         Bukkit.getScheduler().runTask(plugin, task);
     }
 
+    /**
+     * Runs a task asynchronously with bukkit.
+     *
+     * @param task The task to run.
+     */
     protected void runAsync(Runnable task) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, task);
     }
@@ -48,9 +93,5 @@ public class MenuHandler {
 
     private void startTasks() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new MenuAutoUpdateTask(this), 0, 1);
-    }
-
-    protected void runSync(Runnable task) {
-        Bukkit.getScheduler().runTask(plugin, task);
     }
 }

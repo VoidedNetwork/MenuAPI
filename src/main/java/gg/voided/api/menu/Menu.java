@@ -14,23 +14,82 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * A wrapper around a bukkit inventory with extra functionality
+ * which stores items as buttons and keeps track of previous menus.
+ *
+ * @author J4C0B3Y
+ * @version MenuAPI
+ * @since 5/05/2024
+ */
 @Getter
 public abstract class Menu {
+    /**
+     * The in-game chest menu width,
+     * which should not be changed.
+     */
     private static final int WIDTH = 9;
 
+    /**
+     * The menus title, this will show
+     * up inside the inventory.
+     */
     private final String title;
+
+    /**
+     * The menu size in rows.
+     */
     private final int rows;
 
+    /**
+     * The player associated with the menu.
+     */
     private final Player player;
+
+    /**
+     * The underlying bukkit inventory that the player sees.
+     */
     private final Inventory inventory;
+
+    /**
+     * The previous menu, if present.
+     */
     @Setter private Menu previousMenu;
 
+    /**
+     * The menu's buttons shown inside the inventory.
+     */
     private final Map<Integer, Button> buttons = new HashMap<>();
-    private final Map<Integer, Button> buttonCache = new HashMap<>();
-    private final MenuHandler handler = MenuHandler.getInstance();
 
+    /**
+     * Acts as a queue for buttons which get
+     * pushed to the menu when update is called.
+     */
+    private final Map<Integer, Button> buttonCache = new HashMap<>();
+
+    /**
+     * The menu's handler.
+     */
+    private final MenuHandler handler;
+
+    /**
+     * The last tick time the menu was updated.
+     */
     private long lastUpdate = 0;
 
+    /**
+     * If the menu's buttons have been set up.
+     */
+    private boolean setup = false;
+
+    /**
+     * Creates a new menu, initializing the underlying bukkit inventory.
+     *
+     * @param title The title, auto translated.
+     * @param size The menu size, amount of rows.
+     * @param player The player to open the menu with.
+     */
     public Menu(String title, MenuSize size, Player player) {
         MenuHandler handler = MenuHandler.getInstance();
         if (handler == null) throw new IllegalStateException("Please initialize the MenuHandler before creating a menu.");
@@ -47,10 +106,27 @@ public abstract class Menu {
         );
     }
 
+    /**
+     * Called when the menu is created,
+     * this always runs on the server thread.
+     */
     public void setupButtons() { }
+
+    /**
+     * Called when the inventory opens,
+     * this always runs on the server thread.
+     */
     public void onOpen() { }
+
+    /**
+     * Called when the inventory closes,
+     * this always runs on the server thread.
+     */
     public void onClose() { }
 
+    /**
+     * Opens the menu, setting up the buttons if they haven't been set up.
+     */
     public void open() {
         handler.runAsync(() -> {
             if (!setup) {
@@ -69,6 +145,10 @@ public abstract class Menu {
         });
     }
 
+    /**
+     * Updates the underlying inventory with the button's item stacks,
+     * also updating the indexes of pagination buttons if present.
+     */
     public void update() {
         lastUpdate = handler.getTicks();
 
@@ -93,7 +173,13 @@ public abstract class Menu {
         handler.runSync(player::updateInventory);
     }
 
+    /**
+     * Returns to the previous menu. If enabled in the handler,
+     * the menu will just close if there is no previous menu.
+     */
     public void back() {
+        if (isClosed()) return;
+
         if (previousMenu == null) {
             if (handler.isCloseOnBack()) close();
             return;
@@ -102,10 +188,35 @@ public abstract class Menu {
         previousMenu.open();
     }
 
+    /**
+     * Closes the inventory for the player.
+     */
     public void close() {
-        onClose();
+        if (isClosed()) return;
+
+        handler.getOpenedMenus().remove(player);
+
+        handler.runSync(() -> {
+            player.closeInventory();
+            handler.runSync(this::onClose);
+        });
     }
 
+    /**
+     * Checks if the players open inventory
+     * does not match the current menu.
+     *
+     * @return If the menu is closed.
+     */
+    public boolean isClosed() {
+         return !handler.getOpenedMenus().get(player).equals(this);
+    }
+
+    /**
+     * Adds a button to a menu's next available slot.
+     *
+     * @param button The button to add.
+     */
     public void add(Button button) {
         for (int i = 0; i < getMaxSlots(); i++) {
             if (buttons.get(i) != null) continue;
@@ -115,30 +226,73 @@ public abstract class Menu {
         }
     }
 
+    /**
+     * Sets a button using a slot's index.
+     *
+     * @param index The slot's index.
+     * @param button The button to set.
+     */
     public void set(int index, Button button) {
         buttonCache.put(index, button);
     }
 
+    /**
+     * Sets a button using a slot's coordinates.
+     *
+     * @param x The slot's x coordinate.
+     * @param y The slot's y coordinate.
+     * @param button The button to set.
+     */
     public void set(int x, int y, Button button) {
         set(getIndex(x, y), button);
     }
 
+    /**
+     * Removes a button using a slot's index.
+     *
+     * @param index The slot's index.
+     */
     public void remove(int index) {
         buttons.remove(index);
     }
 
+    /**
+     * Removes a button using a slot's coordinates.
+     *
+     * @param x The slot's x coordinate.
+     * @param y The slot's y coordinate.
+     */
     public void remove(int x, int y) {
         remove(getIndex(x, y));
     }
 
+    /**
+     * Calculates the max button slots by
+     * multiplying the menu width by the row count.
+     *
+     * @return The max buttons slots in the menu.
+     */
     public int getMaxSlots() {
         return rows * WIDTH;
     }
 
+    /**
+     * Converts a slot's coordinates to its index.
+     *
+     * @param x The slot's x coordinate.
+     * @param y The slot's y coordinate.
+     * @return The slot's index.
+     */
     private int getIndex(int x, int y) {
         return y * WIDTH + x;
     }
 
+    /**
+     * Handles a click event for the menu,
+     * directing it to the respective button.
+     *
+     * @param event The click event.
+     */
     public void handleClick(InventoryClickEvent event) {
         Button button = buttons.get(event.getSlot());
         if (button == null) return;
@@ -146,35 +300,70 @@ public abstract class Menu {
         handler.runSync(() -> button.onClick(event.getClick()));
     }
 
+    /**
+     * Clears all buttons from the menu.
+     */
     public void clear() {
         buttonCache.clear();
     }
 
+    /**
+     * Fills the menu with a button.
+     *
+     * @param button The button.
+     */
     public void fill(Button button) {
         for (int i = 0; i < getMaxSlots(); i++) {
             set(i, button);
         }
     }
 
+    /**
+     * Fills a row with a button.
+     *
+     * @param row The row to fill.
+     * @param button The button.
+     */
     public void fillRow(int row, Button button) {
         for (int i = 0; i < WIDTH; i++) {
             set(i, row, button);
         }
     }
 
+    /**
+     * Fills a column with a button.
+     *
+     * @param column The column to fill.
+     * @param button The button.
+     */
     public void fillColumn(int column, Button button) {
         for (int i = 0; i < rows; i++) {
             set(column, i, button);
         }
     }
 
+    /**
+     * Fills the border of a menu with a button.
+     *
+     * @param button The button.
+     */
     public void fillBorder(Button button) {
         fillRow(0, button);
-        fillColumn(0, button);
+        if (rows < 2) return;
+
         fillRow(getRows() - 1, button);
+        if (rows < 3) return;
+
+        fillColumn(0, button);
         fillColumn(WIDTH - 1, button);
     }
 
+    /**
+     * Fills the center of a menu with a button,
+     * this is similar to a fill but inset by one.
+     *
+     * @param button The button.
+     */
     public void fillCenter(Button button) {
         if (rows < 3) return;
 

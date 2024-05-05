@@ -7,15 +7,28 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+/**
+ * Used to automatically close inventories when a player leaves.
+ *
+ * @author J4C0B3Y
+ * @version MenuAPI
+ * @since 5/05/2024
+ */
 @RequiredArgsConstructor
 public class QuitListener implements Listener {
+    /**
+     * The listener's menu handler.
+     */
     private final MenuHandler handler;
 
+    /**
+     * Closes a player's menu when they leave if they have one open.
+     *
+     * @param event The quit event.
+     */
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Menu menu = handler.getOpenedMenus().get(event.getPlayer());
         if (menu != null) menu.close();
-
-        handler.getOpenedMenus().remove(event.getPlayer());
     }
 }

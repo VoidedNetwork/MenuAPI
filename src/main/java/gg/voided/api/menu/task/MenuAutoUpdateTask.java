@@ -5,7 +5,13 @@ import gg.voided.api.menu.MenuHandler;
 import gg.voided.api.menu.annotation.AutoUpdate;
 import lombok.RequiredArgsConstructor;
 
-
+/**
+ * Task for auto updating menus.
+ *
+ * @author J4C0B3Y
+ * @version MenuAPI
+ * @since 5/05/2024
+ */
 @RequiredArgsConstructor
 public class MenuAutoUpdateTask implements Runnable {
     private final MenuHandler handler;
