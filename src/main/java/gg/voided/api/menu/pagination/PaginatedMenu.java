@@ -21,13 +21,14 @@ public abstract class PaginatedMenu extends Menu {
     }
 
     public void update() {
-        super.update();
-
         paginationSlots = 0;
 
         for (Button button : getButtons().values()) {
             if (button instanceof PaginationButton) paginationSlots++;
         }
+
+        page = MathUtils.clamp(page, 1, getTotalPages());
+        super.update();
     }
 
     public void nextPage() {
