@@ -373,4 +373,13 @@ public abstract class Menu {
             }
         }
     }
+
+    /**
+     * Checks if the menu has a previous menu.
+     *
+     * @return If there is a previous menu.
+     */
+    public boolean hasPreviousMenu() {
+        return previousMenu != null;
+    }
 }
