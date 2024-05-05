@@ -1,8 +1,7 @@
 package gg.voided.api.menu;
 
-import gg.voided.api.menu.listener.ClickListener;
-import gg.voided.api.menu.listener.OpenListener;
-import gg.voided.api.menu.listener.QuitListener;
+import gg.voided.api.menu.listener.InventoryListener;
+import gg.voided.api.menu.listener.ConnectionListener;
 import gg.voided.api.menu.task.MenuAutoUpdateTask;
 import lombok.Getter;
 import lombok.Setter;
@@ -86,9 +85,8 @@ public class MenuHandler {
     }
 
     private void registerListeners() {
-        Bukkit.getPluginManager().registerEvents(new ClickListener(this), plugin);
-        Bukkit.getPluginManager().registerEvents(new OpenListener(this), plugin);
-        Bukkit.getPluginManager().registerEvents(new QuitListener(this), plugin);
+        Bukkit.getPluginManager().registerEvents(new ConnectionListener(this), plugin);
+        Bukkit.getPluginManager().registerEvents(new InventoryListener(this), plugin);
     }
 
     private void startTasks() {

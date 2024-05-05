@@ -8,14 +8,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
- * Used to automatically close inventories when a player leaves.
+ * Handles connection related actions.
  *
  * @author J4C0B3Y
  * @version MenuAPI
  * @since 5/05/2024
  */
 @RequiredArgsConstructor
-public class QuitListener implements Listener {
+public class ConnectionListener implements Listener {
     /**
      * The listener's menu handler.
      */
