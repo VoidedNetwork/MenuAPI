@@ -47,12 +47,20 @@ public abstract class Menu {
     public void onClose() { }
 
     public void open() {
-        handler.getOpenedMenus().put(player, this);
-        update();
+        handler.runAsync(() -> {
+            if (!setup) {
+                setupButtons();
+                setup = true;
+            }
 
-        handler.runSync(() -> {
-            player.openInventory(inventory);
-            onOpen();
+            update();
+
+            handler.runSync(() -> {
+                player.openInventory(inventory);
+                onOpen();
+            });
+
+            handler.getOpenedMenus().put(player, this);
         });
     }
 

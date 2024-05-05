@@ -32,6 +32,14 @@ public class MenuHandler {
         startTasks();
     }
 
+    protected void runSync(Runnable task) {
+        Bukkit.getScheduler().runTask(plugin, task);
+    }
+
+    protected void runAsync(Runnable task) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, task);
+    }
+
     private void registerListeners() {
         Bukkit.getPluginManager().registerEvents(new ClickListener(this), plugin);
         Bukkit.getPluginManager().registerEvents(new OpenListener(this), plugin);
