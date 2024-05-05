@@ -29,7 +29,7 @@ public abstract class Menu {
      * The in-game chest menu width,
      * which should not be changed.
      */
-    private static final int WIDTH = 9;
+    public static final int WIDTH = 9;
 
     /**
      * The menus title, this will show
