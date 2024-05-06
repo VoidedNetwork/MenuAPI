@@ -166,7 +166,17 @@ public abstract class Menu {
                     ((PaginationButton) button).setIndex(++paginationButtons);
                 }
 
-                if (entry.getKey() > items.length) continue;
+                if (entry.getKey() > items.length) {
+                    handler.getPlugin().getLogger().warning(
+                        "[MenuAPI] Menu '" + getClass().getSimpleName() +
+                            "' has button '" + button.getClass().getSimpleName() +
+                            "' at index '" + entry.getKey() +
+                            "' out of bounds '" + getMaxSlots() + "'."
+                    );
+
+                    continue;
+                }
+
                 items[entry.getKey()] = button.getItem(player);
             }
 
