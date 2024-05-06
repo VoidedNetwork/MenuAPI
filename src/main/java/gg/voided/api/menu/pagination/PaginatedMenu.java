@@ -4,7 +4,6 @@ import gg.voided.api.menu.Menu;
 import gg.voided.api.menu.MenuSize;
 import gg.voided.api.menu.button.Button;
 import gg.voided.api.menu.pagination.buttons.PaginationButton;
-import gg.voided.api.menu.utils.MathUtils;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
@@ -57,7 +56,7 @@ public abstract class PaginatedMenu extends Menu {
             if (button instanceof PaginationButton) paginationSlots++;
         }
 
-        page = MathUtils.clamp(page, 1, getTotalPages());
+        page = Math.max(Math.min(page, getTotalPages()), 1);
         super.update();
     }
 
