@@ -62,7 +62,7 @@ public final class PaginationButton extends Button {
      */
     public Button getButton() {
         int index = menu.getPageIndex() * menu.getPaginationSlots() + this.index;
-        if (index > menu.getEntries().size()) return null;
+        if (index >= menu.getEntries().size()) return null;
 
         return menu.getEntries().get(index);
     }
