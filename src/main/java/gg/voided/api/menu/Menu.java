@@ -199,6 +199,7 @@ public abstract class Menu {
             return;
         }
 
+        handler.getOpenedMenus().remove(player);
         previousMenu.open();
     }
 
