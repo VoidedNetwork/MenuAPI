@@ -127,66 +127,25 @@ public abstract class Menu {
      * Opens the menu, setting up the buttons if they haven't been set up.
      */
     public void open() {
-        if (hasPreviousMenu()) previousMenu.close();
-
         if (!setup) {
             setupButtons();
             setup = true;
         }
 
-        update(() -> {
+        if (hasPreviousMenu()) handler.getOpenedMenus().remove(player);
+        update();
+
+        if (Bukkit.isPrimaryThread()) {
+            player.openInventory(inventory);
+            onOpen();
+        } else {
             handler.runSync(() -> {
                 player.openInventory(inventory);
                 onOpen();
             });
+        }
 
-            handler.getOpenedMenus().put(player, this);
-        });
-    }
-
-    /**
-     * Updates the underlying inventory with the button's item stacks,
-     * also updating the indexes of pagination buttons if present.
-     */
-    public void update(Runnable callback) {
-        handler.runAsync(() -> {
-            lastUpdate = handler.getTicks();
-
-            buttons.clear();
-            buttons.putAll(buttonCache);
-
-            ItemStack[] items = new ItemStack[getMaxSlots()];
-
-            int paginationButtons = 0;
-
-            for (Map.Entry<Integer, Button> entry : buttons.entrySet()) {
-                Button button = entry.getValue();
-
-                if (button instanceof PaginationButton) {
-                    ((PaginationButton) button).setIndex(++paginationButtons);
-                }
-
-                if (entry.getKey() > items.length) {
-                    handler.getPlugin().getLogger().warning(
-                        "[MenuAPI] Menu '" + getClass().getSimpleName() +
-                            "' has button '" + button.getClass().getSimpleName() +
-                            "' at index '" + entry.getKey() +
-                            "' out of bounds '" + getMaxSlots() + "'."
-                    );
-
-                    continue;
-                }
-
-                items[entry.getKey()] = button.getItem(player);
-            }
-
-            inventory.setContents(items);
-
-            handler.runSync(() -> {
-                player.updateInventory();
-                if (callback != null) callback.run();
-            });
-        });
+        handler.getOpenedMenus().put(player, this);
     }
 
     /**
@@ -194,7 +153,38 @@ public abstract class Menu {
      * also updating the indexes of pagination buttons if present.
      */
     public void update() {
-        update(null);
+        lastUpdate = handler.getTicks();
+
+        buttons.clear();
+        buttons.putAll(buttonCache);
+
+        ItemStack[] items = new ItemStack[getMaxSlots()];
+
+        int paginationButtons = 0;
+
+        for (Map.Entry<Integer, Button> entry : buttons.entrySet()) {
+            Button button = entry.getValue();
+
+            if (button instanceof PaginationButton) {
+                ((PaginationButton) button).setIndex(++paginationButtons);
+            }
+
+            if (entry.getKey() >= items.length) {
+                handler.getPlugin().getLogger().warning(
+                    "[MenuAPI] Menu '" + getClass().getSimpleName() +
+                        "' has button '" + button.getClass().getSimpleName() +
+                        "' at index '" + entry.getKey() +
+                        "' out of bounds '" + getMaxSlots() + "'."
+                );
+
+                continue;
+            }
+
+            items[entry.getKey()] = button.getItem(player);
+        }
+
+        inventory.setContents(items);
+        player.updateInventory();
     }
 
     /**
