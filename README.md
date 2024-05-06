@@ -8,7 +8,7 @@ Simple to use, high performance bukkit menu API.
 - Async buttons / menu updating
 - Paginated menus
 - Auto update annotation
-- Build for performance
+- Built for performance
 
 ## Usage
 
