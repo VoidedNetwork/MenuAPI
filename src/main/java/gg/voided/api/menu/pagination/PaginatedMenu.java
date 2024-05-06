@@ -102,7 +102,7 @@ public abstract class PaginatedMenu extends Menu {
      * @return The total page count.
      */
     public int getTotalPages() {
-        return paginationSlots / entries.size();
+        return entries.size() / paginationSlots;
     }
 
     /**
