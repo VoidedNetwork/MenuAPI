@@ -70,15 +70,6 @@ public class MenuHandler {
         Bukkit.getScheduler().runTask(plugin, task);
     }
 
-    /**
-     * Runs a task asynchronously with bukkit.
-     *
-     * @param task The task to run.
-     */
-    protected void runAsync(Runnable task) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, task);
-    }
-
     private void registerListeners() {
         Bukkit.getPluginManager().registerEvents(new ConnectionListener(this), plugin);
         Bukkit.getPluginManager().registerEvents(new InventoryListener(this), plugin);
