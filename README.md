@@ -52,9 +52,9 @@ Make sure to replace `VERSION` with the newest release.
 
 ```xml
 <dependency>
-    <groupId>com.github.User</groupId>
-    <artifactId>Repo</artifactId>
-    <version>Tag</version>
+    <groupId>com.github.VoidedNetwork</groupId>
+    <artifactId>MenuAPI</artifactId>
+    <version>VERSION</version>
 </dependency>
 ```
 </details>
