@@ -42,11 +42,6 @@ public class MenuHandler {
     private boolean closeOnBack = false;
 
     /**
-     * Weather the pagination ignore duplicate button entries.
-     */
-    private boolean uniquePaginationEntries = false;
-
-    /**
      * A tick timer used internally for auto updating,
      * this should not be modified.
      */

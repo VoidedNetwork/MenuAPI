@@ -93,7 +93,7 @@ public abstract class PaginatedMenu extends Menu {
      * @param button The button to add.
      */
     public void addEntry(Button button) {
-        if (!getHandler().isUniquePaginationEntries() || !entries.contains(button)) entries.add(button);
+       entries.add(button);
     }
 
     /**
