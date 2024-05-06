@@ -64,6 +64,7 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) return;
+        if (event.getClickedInventory() == null) return;
 
         Menu menu = handler.getOpenedMenus().get((Player) event.getWhoClicked());
         if (menu == null) return;
