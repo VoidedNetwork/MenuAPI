@@ -7,6 +7,8 @@ Simple to use, high performance bukkit menu API.
 - Quick and simple usage
 - Paginated menus
 - Auto update annotation
+- Asynchronous menus
+- Layers & Templates
 - Built for performance
 
 ## Usage
