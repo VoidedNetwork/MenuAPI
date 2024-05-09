@@ -1,7 +1,11 @@
 package gg.voided.api.menu;
 
 import gg.voided.api.menu.button.Button;
-import gg.voided.api.menu.pagination.buttons.PaginationButton;
+import gg.voided.api.menu.button.ButtonClick;
+import gg.voided.api.menu.layer.Layer;
+import gg.voided.api.menu.pagination.PaginationButton;
+import gg.voided.api.menu.template.Template;
+import gg.voided.api.menu.utils.Color;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -14,386 +18,149 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * A wrapper around a bukkit inventory with extra functionality
- * which stores items as buttons and keeps track of previous menus.
- *
- * @author J4C0B3Y
- * @version MenuAPI
- * @since 5/05/2024
- */
 @Getter
 public abstract class Menu {
-    /**
-     * The in-game chest menu width,
-     * which should not be changed.
-     */
-    public static final int WIDTH = 9;
+    public static final int COLUMNS = 9;
 
-    /**
-     * The menus title, this will show
-     * up inside the inventory.
-     */
+    private final MenuHandler handler = MenuHandler.getInstance();
+
+    private final Player player;
+    private final Inventory inventory;
     private final String title;
-
-    /**
-     * The menu size in rows.
-     */
     private final int rows;
 
-    /**
-     * The player associated with the menu.
-     */
-    private final Player player;
+    private final Layer foreground;
+    private final Layer background;
 
-    /**
-     * The underlying bukkit inventory that the player sees.
-     */
-    private final Inventory inventory;
-
-    /**
-     * The previous menu, if present.
-     */
     @Setter private Menu previousMenu;
+    @Setter private boolean async = false;
 
-    /**
-     * The menu's buttons shown inside the inventory.
-     */
-    private final Map<Integer, Button> buttons = new HashMap<>();
-
-    /**
-     * Acts as a queue for buttons which get
-     * pushed to the menu when update is called.
-     */
-    private final Map<Integer, Button> buttonCache = new HashMap<>();
-
-    /**
-     * The menu's handler.
-     */
-    private final MenuHandler handler;
-
-    /**
-     * The last tick time the menu was updated.
-     */
     private long lastUpdate = 0;
-
-    /**
-     * If the menu's buttons have been set up.
-     */
     private boolean setup = false;
 
-    /**
-     * Creates a new menu, initializing the underlying bukkit inventory.
-     *
-     * @param title The title, auto translated.
-     * @param size The menu size, amount of rows.
-     * @param player The player to open the menu with.
-     */
+    private final Map<Integer, Button> buttons = new HashMap<>();
+
     public Menu(String title, MenuSize size, Player player) {
-        MenuHandler handler = MenuHandler.getInstance();
-        if (handler == null) throw new IllegalStateException("Please initialize the MenuHandler before creating a menu.");
-        this.handler = handler;
-
-        this.title = ChatColor.translateAlternateColorCodes('&', title);
-        this.rows = size.getRows();
         this.player = player;
+        this.rows = size.getRows();
 
-        this.inventory = Bukkit.createInventory(
-            player,
-            getMaxSlots(),
-            this.title
-        );
+        this.foreground = new Layer(this);
+        this.background = new Layer(this);
+
+        this.title = Color.translate(title);
+        this.inventory = Bukkit.createInventory(player, getTotalSlots(), this.title);
     }
 
-    /**
-     * Called when the menu is created,
-     * this always runs on the server thread.
-     */
-    public void setupButtons() { }
-
-    /**
-     * Called when the inventory opens,
-     * this always runs on the server thread.
-     */
+    public abstract void setup();
     public void onOpen() { }
-
-    /**
-     * Called when the inventory closes,
-     * this always runs on the server thread.
-     */
     public void onClose() { }
+    public void onClick(ButtonClick click) { }
 
-    /**
-     * Opens the menu, setting up the buttons if they haven't been set up.
-     */
     public void open() {
-        if (!setup) {
-            setupButtons();
-            setup = true;
-        }
+        handler.runTask(() -> {
+            if (!setup) {
+                setup();
+                setup = true;
+            }
 
-        if (hasPreviousMenu()) handler.getOpenedMenus().remove(player);
-        update();
+            update(false);
 
-        if (Bukkit.isPrimaryThread()) {
-            player.openInventory(inventory);
-            onOpen();
-        } else {
             handler.runSync(() -> {
+                if (handler.isResetCursor()) player.closeInventory();
                 player.openInventory(inventory);
-                onOpen();
+
+                handler.runTask(() -> {
+                    onOpen();
+                    handler.getOpenMenus().put(player, this);
+                }, async);
             });
-        }
-
-        handler.getOpenedMenus().put(player, this);
+        }, async);
     }
 
-    /**
-     * Updates the underlying inventory with the button's item stacks,
-     * also updating the indexes of pagination buttons if present.
-     */
+    public void close() {
+        handler.getOpenMenus().remove(player, this);
+        handler.runTask(this::onClose, async);
+    }
+
     public void update() {
-        lastUpdate = handler.getTicks();
-
-        buttons.clear();
-        buttons.putAll(buttonCache);
-
-        ItemStack[] items = new ItemStack[getMaxSlots()];
-
-        int paginationButtons = 0;
-
-        for (Map.Entry<Integer, Button> entry : buttons.entrySet()) {
-            Button button = entry.getValue();
-
-            if (button instanceof PaginationButton) {
-                ((PaginationButton) button).setIndex(++paginationButtons);
-            }
-
-            if (entry.getKey() >= items.length) {
-                handler.getPlugin().getLogger().warning(
-                    "[MenuAPI] Menu '" + getClass().getSimpleName() +
-                        "' has button '" + button.getClass().getSimpleName() +
-                        "' at index '" + entry.getKey() +
-                        "' out of bounds '" + getMaxSlots() + "'."
-                );
-
-                continue;
-            }
-
-            items[entry.getKey()] = button.getItem(player);
-        }
-
-        inventory.setContents(items);
-        player.updateInventory();
+        update(async);
     }
 
-    /**
-     * Returns to the previous menu. If enabled in the handler,
-     * the menu will just close if there is no previous menu.
-     */
-    public void back() {
-        if (isClosed()) return;
+    private void update(boolean async) {
+        handler.runTask(() -> {
+            lastUpdate = handler.getAutoUpdateTask().getTicks();
 
+            buttons.clear();
+            buttons.putAll(getQueuedButtons());
+
+            ItemStack[] icons = new ItemStack[getTotalSlots()];
+
+            buttons.forEach((slot, button) -> {
+                if (slot >= icons.length) {
+                    handler.getPlugin().getLogger().warning(
+                        "[MenuAPI] Menu '" + getClass().getSimpleName() +
+                            "' has button '" + button.getClass().getSimpleName() +
+                            "' at index '" + slot +
+                            "' out of bounds '" + getTotalSlots() + "'."
+                    );
+
+                    return;
+                }
+
+                if (button instanceof PaginationButton) {
+                    ((PaginationButton) button).setIconSlot(slot);
+                }
+
+                icons[slot] = button.getIcon();
+            });
+
+            handler.runSync(() -> {
+                inventory.setContents(icons);
+                player.updateInventory();
+            });
+        }, async);
+    }
+
+    public void back() {
         if (previousMenu == null) {
             if (handler.isCloseOnBack()) close();
             return;
         }
 
-        handler.getOpenedMenus().remove(player);
         previousMenu.open();
     }
 
-    /**
-     * Closes the inventory for the player.
-     */
-    public void close() {
-        if (isClosed()) return;
-
-        handler.getOpenedMenus().remove(player);
-
-        handler.runSync(() -> {
-            player.closeInventory();
-            handler.runSync(this::onClose);
-        });
+    public void apply(Template template) {
+        template.setup(background, foreground);
     }
 
-    /**
-     * Checks if the players open inventory
-     * does not match the current menu.
-     *
-     * @return If the menu is closed.
-     */
-    public boolean isClosed() {
-         return !handler.getOpenedMenus().get(player).equals(this);
-    }
-
-    /**
-     * Adds a button to a menu's next available slot.
-     *
-     * @param button The button to add.
-     */
-    public void add(Button button) {
-        for (int i = 0; i < getMaxSlots(); i++) {
-            if (buttonCache.get(i) != null) continue;
-
-            set(i, button);
-            return;
-        }
-    }
-
-    /**
-     * Sets a button using a slot's index.
-     *
-     * @param index The slot's index.
-     * @param button The button to set.
-     */
-    public void set(int index, Button button) {
-        buttonCache.put(index, button);
-    }
-
-    /**
-     * Sets a button using a slot's coordinates.
-     *
-     * @param x The slot's x coordinate.
-     * @param y The slot's y coordinate.
-     * @param button The button to set.
-     */
-    public void set(int x, int y, Button button) {
-        set(getIndex(x, y), button);
-    }
-
-    /**
-     * Removes a button using a slot's index.
-     *
-     * @param index The slot's index.
-     */
-    public void remove(int index) {
-        buttons.remove(index);
-    }
-
-    /**
-     * Removes a button using a slot's coordinates.
-     *
-     * @param x The slot's x coordinate.
-     * @param y The slot's y coordinate.
-     */
-    public void remove(int x, int y) {
-        remove(getIndex(x, y));
-    }
-
-    /**
-     * Calculates the max button slots by
-     * multiplying the menu width by the row count.
-     *
-     * @return The max buttons slots in the menu.
-     */
-    public int getMaxSlots() {
-        return rows * WIDTH;
-    }
-
-    /**
-     * Converts a slot's coordinates to its index.
-     *
-     * @param x The slot's x coordinate.
-     * @param y The slot's y coordinate.
-     * @return The slot's index.
-     */
-    private int getIndex(int x, int y) {
-        return y * WIDTH + x;
-    }
-
-    /**
-     * Handles a click event for the menu,
-     * directing it to the respective button.
-     *
-     * @param event The click event.
-     */
-    public void handleClick(InventoryClickEvent event) {
+    public void click(InventoryClickEvent event) {
         Button button = buttons.get(event.getSlot());
-        if (button == null) return;
+        ButtonClick click = new ButtonClick(event, button, this);
 
-        handler.runSync(() -> button.onClick(event.getClick()));
+        onClick(click);
+        if (button == null || click.isIgnored()) return;
+
+        button.onClick(click);
     }
 
-    /**
-     * Clears all buttons from the menu.
-     */
-    public void clear() {
-        buttonCache.clear();
+    public Map<Integer, Button> getQueuedButtons() {
+        Map<Integer, Button> buttons = new HashMap<>();
+
+        buttons.putAll(background.getButtons());
+        buttons.putAll(foreground.getButtons());
+
+        return buttons;
     }
 
-    /**
-     * Fills the menu with a button.
-     *
-     * @param button The button.
-     */
-    public void fill(Button button) {
-        for (int i = 0; i < getMaxSlots(); i++) {
-            set(i, button);
-        }
+    public int getTotalSlots() {
+        return rows * COLUMNS;
     }
 
-    /**
-     * Fills a row with a button.
-     *
-     * @param row The row to fill.
-     * @param button The button.
-     */
-    public void fillRow(int row, Button button) {
-        for (int i = 0; i < WIDTH; i++) {
-            set(i, row, button);
-        }
+    public int getIndex(int x, int y) {
+        return y * COLUMNS + x;
     }
 
-    /**
-     * Fills a column with a button.
-     *
-     * @param column The column to fill.
-     * @param button The button.
-     */
-    public void fillColumn(int column, Button button) {
-        for (int i = 0; i < rows; i++) {
-            set(column, i, button);
-        }
-    }
-
-    /**
-     * Fills the border of a menu with a button.
-     *
-     * @param button The button.
-     */
-    public void fillBorder(Button button) {
-        fillRow(0, button);
-        if (rows < 2) return;
-
-        fillRow(getRows() - 1, button);
-        if (rows < 3) return;
-
-        fillColumn(0, button);
-        fillColumn(WIDTH - 1, button);
-    }
-
-    /**
-     * Fills the center of a menu with a button,
-     * this is similar to a fill but inset by one.
-     *
-     * @param button The button.
-     */
-    public void fillCenter(Button button) {
-        if (rows < 3) return;
-
-        for (int x = 1; x < WIDTH - 1; x++) {
-            for (int y = 1; y < rows - 1; y++) {
-                set(x, y, button);
-            }
-        }
-    }
-
-    /**
-     * Checks if the menu has a previous menu.
-     *
-     * @return If there is a previous menu.
-     */
     public boolean hasPreviousMenu() {
         return previousMenu != null;
     }

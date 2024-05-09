@@ -8,70 +8,36 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryInteractEvent;
+import org.bukkit.inventory.Inventory;
 
-/**
- * Handles inventory related actions.
- *
- * @author J4C0B3Y
- * @version MenuAPI
- * @since 5/05/2024
- */
 @RequiredArgsConstructor
 public class InventoryListener implements Listener {
-    /**
-     * The listener's menu handler.
-     */
     private final MenuHandler handler;
 
-    /**
-     * Closes a menu when a new one gets opened.
-     *
-     * @param event The open event.
-     */
     @EventHandler
-    public void onOpen(InventoryOpenEvent event) {
-        if (!(event.getPlayer() instanceof Player)) return;
+    public void onInteract(InventoryInteractEvent event) {
+        if (!(event.getWhoClicked() instanceof Player)) return;
 
-        Menu menu = handler.getOpenedMenus().get((Player) event.getPlayer());
+        Menu menu = handler.getOpenMenus().get((Player) event.getWhoClicked());
         if (menu == null) return;
 
-        if (event.getInventory().equals(menu.getInventory())) return;
-        menu.close();
+        Inventory inventory = event.getInventory();
+        if (inventory != null && !menu.getInventory().equals(inventory)) return;
+
+        event.setCancelled(true);
+
+        if (!(event instanceof InventoryClickEvent)) return;
+        menu.click((InventoryClickEvent) event);
     }
 
-    /**
-     * Calls the close handler of the menu when it is closed.
-     *
-     * @param event The close event.
-     */
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) return;
 
-        Menu menu = handler.getOpenedMenus().get((Player) event.getPlayer());
+        Menu menu = handler.getOpenMenus().get((Player) event.getPlayer());
         if (menu == null) return;
 
         menu.close();
-    }
-
-    /**
-     * Sends a click event to a player's menu if they have one
-     * open, cancelling the click, so they can't pick up the item.
-     *
-     * @param event The click event.
-     */
-    @EventHandler
-    public void onClick(InventoryClickEvent event) {
-        if (!(event.getWhoClicked() instanceof Player)) return;
-        if (event.getClickedInventory() == null) return;
-
-        Menu menu = handler.getOpenedMenus().get((Player) event.getWhoClicked());
-        if (menu == null) return;
-
-        if (!event.getClickedInventory().equals(menu.getInventory())) return;
-
-        event.setCancelled(true);
-        menu.handleClick(event);
     }
 }

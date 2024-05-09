@@ -3,133 +3,78 @@ package gg.voided.api.menu.pagination;
 import gg.voided.api.menu.Menu;
 import gg.voided.api.menu.MenuSize;
 import gg.voided.api.menu.button.Button;
-import gg.voided.api.menu.pagination.buttons.PaginationButton;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-/**
- * A menu with pagination functionality.
- *
- * @author J4C0B3Y
- * @version MenuAPI
- * @since 5/05/2024
- */
 @Getter
 public abstract class PaginatedMenu extends Menu {
-    /**
-     * The buttons to be paginated.
-     */
-    private final List<Button> entries = new ArrayList<>();
+    private final static int MINIMUM_PAGE = 1;
 
-    /**
-     * The current page.
-     */
-    private int page = 1;
+    private final List<Button> paginatedButtons = new ArrayList<>();
+    private final Map<Integer, Integer> indexCache = new HashMap<>();
 
-    /**
-     * The number of pagination slots.
-     */
-    private int paginationSlots = 0;
+    private int page = MINIMUM_PAGE;
 
-    /**
-     * Creates a new paginated menu, initializing the underlying bukkit inventory.
-     *
-     * @param title The title, auto translated.
-     * @param size The menu size, amount of rows.
-     * @param player The player to open the menu with.
-     */
     public PaginatedMenu(String title, MenuSize size, Player player) {
         super(title, size, player);
     }
 
-    /**
-     * Updates the pagination slot count, corrects the
-     * pagination page and then calls {@link Menu#update()}.
-     */
-    public void update() {
-        paginationSlots = 0;
+    public abstract List<Button> getPaginatedButtons();
 
-        for (Button button : getButtons().values()) {
-            if (button instanceof PaginationButton) paginationSlots++;
+    @Override
+    public void update() {
+        int index = 0;
+        indexCache.clear();
+
+        for (Map.Entry<Integer, Button> entry : getQueuedButtons().entrySet()) {
+            if (entry.getValue() instanceof PaginationButton) {
+                indexCache.put(entry.getKey(), ++index);
+            }
         }
 
-        page = Math.max(Math.min(page, getTotalPages()), 1);
+        page = Math.min(Math.max(page, MINIMUM_PAGE), getTotalPages());
         super.update();
     }
 
-    /**
-     * Switches to the next page and updates the menu.
-     */
-    public void nextPage() {
+    public void next() {
         page++;
         update();
     }
 
-    /**
-     * Switches to the previous page and updates the menu.
-     */
-    public void previousPage() {
+    public void previous() {
         page--;
         update();
     }
 
-    /**
-     * Sets the page and updates the menu.
-     *
-     * @param page The page to switch to.
-     */
-    public void setPage(int page) {
-        this.page = page;
+    public void page(int number) {
+        page = number;
         update();
     }
 
-    /**
-     * Adds a button to the pagination entries.
-     *
-     * @param button The button to add.
-     */
-    public void addEntry(Button button) {
-       entries.add(button);
-    }
-
-    /**
-     * Calculates the total page count by dividing
-     * the slot count by the entry count.
-     *
-     * @return The total page count.
-     */
     public int getTotalPages() {
-        if (paginationSlots == 0) return 1;
-        return entries.size() / paginationSlots + 1;
+        return Math.max(
+            (int) Math.ceil((double) paginatedButtons.size() / getPaginationSlots()),
+            MINIMUM_PAGE
+        );
     }
 
-    /**
-     * Calculates the page index by
-     * subtracting one from the page number.
-     *
-     * @return The page index.
-     */
     public int getPageIndex() {
         return page - 1;
     }
 
-    /**
-     * Checks if there is a next page.
-     *
-     * @return If there is a next page.
-     */
+    public int getPaginationSlots() {
+        return indexCache.size();
+    }
+
     public boolean hasNextPage() {
         return page < getTotalPages();
     }
 
-    /**
-     * Checks if there is a previous page.
-     *
-     * @return If there is a previous page.
-     */
     public boolean hasPreviousPage() {
         return page > 1;
     }
