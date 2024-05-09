@@ -1,8 +1,7 @@
-package gg.voided.api.menu.pagination.button;
+package gg.voided.api.menu.pagination.menu.select.button;
 
 import gg.voided.api.menu.button.Button;
 import gg.voided.api.menu.button.ButtonClick;
-import gg.voided.api.menu.pagination.PaginatedMenu;
 import gg.voided.api.menu.pagination.menu.select.SelectPageMenu;
 import gg.voided.api.menu.utils.Color;
 import lombok.RequiredArgsConstructor;
@@ -15,24 +14,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class NextPageButton extends Button {
-    private final PaginatedMenu menu;
+public class SelectPageButton extends Button {
+    private final int page;
+    private final SelectPageMenu menu;
 
     @Override
     public ItemStack getIcon() {
-        if (!menu.hasNextPage()) return null;
-
-        ItemStack item = new ItemStack(Material.ARROW);
+        ItemStack item = new ItemStack(Material.BOOK);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(Color.translate("&d&lNext Page"));
+        meta.setDisplayName(Color.translate("&d&lPage " + page));
 
         List<String> lore = new ArrayList<>();
         lore.add("");
-        lore.add("&7Page: &f" + menu.getPage() + "&7/&f" + menu.getTotalPages());
-        lore.add("");
-        lore.add("&dSelect Page &7(Middle Click)");
-        lore.add("&dNext Page &7(Left Click)");
+        lore.add("&dSelect Page " + page + " &7(Left Click)");
 
         meta.setLore(Color.translate(lore));
         item.setItemMeta(meta);
@@ -42,11 +37,9 @@ public class NextPageButton extends Button {
 
     @Override
     public void onClick(ButtonClick click) {
-        if (click.getType().equals(ClickType.MIDDLE)) {
-            new SelectPageMenu(menu).open();
-            return;
-        }
+        if (!click.getType().equals(ClickType.LEFT)) return;
 
-        if (click.getType().equals(ClickType.LEFT)) menu.next();
+        menu.getPaginatedMenu().page(page);
+        menu.back();
     }
 }

@@ -20,8 +20,8 @@ public class MenuHandler {
     private final Map<Player, Menu> openMenus = new ConcurrentHashMap<>();
     private final AutoUpdateTask autoUpdateTask;
 
-    @Setter private boolean resetCursor;
-    @Setter private boolean closeOnBack;
+    @Setter private boolean resetCursor = false;
+    @Setter private boolean closeOnBack = false;
 
     public MenuHandler(JavaPlugin plugin) {
         instance = this;

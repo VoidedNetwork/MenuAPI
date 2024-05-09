@@ -14,9 +14,7 @@ public final class PaginationButton extends Button {
     @Override
     public ItemStack getIcon() {
         Button button = getButton(iconSlot);
-        if (button != null) return button.getIcon();
-
-        return null;
+        return button != null ? button.getIcon() : null;
     }
 
     @Override

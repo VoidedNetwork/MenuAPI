@@ -3,6 +3,7 @@ package gg.voided.api.menu.pagination.button;
 import gg.voided.api.menu.button.Button;
 import gg.voided.api.menu.button.ButtonClick;
 import gg.voided.api.menu.pagination.PaginatedMenu;
+import gg.voided.api.menu.pagination.menu.select.SelectPageMenu;
 import gg.voided.api.menu.utils.Color;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
@@ -30,6 +31,7 @@ public class PreviousPageButton extends Button {
         lore.add("");
         lore.add("&7Page: &f" + menu.getPage() + "&7/&f" + menu.getTotalPages());
         lore.add("");
+        lore.add("&dSelect Page &7(Middle Click)");
         lore.add("&dPrevious Page &7(Left Click)");
 
         meta.setLore(Color.translate(lore));
@@ -40,6 +42,11 @@ public class PreviousPageButton extends Button {
 
     @Override
     public void onClick(ButtonClick click) {
+        if (click.getType().equals(ClickType.MIDDLE)) {
+            new SelectPageMenu(menu).open();
+            return;
+        }
+
         if (click.getType().equals(ClickType.LEFT)) menu.previous();
     }
 }
