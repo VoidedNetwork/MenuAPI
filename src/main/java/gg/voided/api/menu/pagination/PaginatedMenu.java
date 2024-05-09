@@ -19,6 +19,7 @@ public abstract class PaginatedMenu extends Menu {
     private final Map<Integer, Integer> indexCache = new HashMap<>();
 
     private int page = MINIMUM_PAGE;
+    private int totalPages = MINIMUM_PAGE;
 
     public PaginatedMenu(String title, MenuSize size, Player player) {
         super(title, size, player);
@@ -37,7 +38,12 @@ public abstract class PaginatedMenu extends Menu {
             }
         }
 
-        page = Math.min(Math.max(page, MINIMUM_PAGE), getTotalPages());
+        totalPages = Math.max(
+            (int) Math.ceil((double) paginatedButtons.size() / getPaginationSlots()),
+            MINIMUM_PAGE
+        );
+
+        page = Math.min(Math.max(page, MINIMUM_PAGE), totalPages);
         super.update();
     }
 
@@ -54,13 +60,6 @@ public abstract class PaginatedMenu extends Menu {
     public void page(int number) {
         page = number;
         update();
-    }
-
-    public int getTotalPages() {
-        return Math.max(
-            (int) Math.ceil((double) paginatedButtons.size() / getPaginationSlots()),
-            MINIMUM_PAGE
-        );
     }
 
     public int getPageIndex() {
