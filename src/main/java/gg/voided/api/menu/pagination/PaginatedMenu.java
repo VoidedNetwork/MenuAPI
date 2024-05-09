@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Getter
 public abstract class PaginatedMenu extends Menu {
-    private final static int MINIMUM_PAGE = 1;
+    public final static int MINIMUM_PAGE = 1;
 
     private final List<Button> paginatedButtons = new ArrayList<>();
     private final Map<Integer, Integer> indexCache = new HashMap<>();
