@@ -2,6 +2,7 @@ package gg.voided.api.menu.pagination.menu.selection;
 
 import gg.voided.api.menu.MenuSize;
 import gg.voided.api.menu.button.Button;
+import gg.voided.api.menu.layer.Layer;
 import gg.voided.api.menu.pagination.PaginatedMenu;
 import gg.voided.api.menu.pagination.menu.selection.button.SelectPageButton;
 import gg.voided.api.menu.template.impl.PaginationTemplate;
@@ -22,7 +23,7 @@ public class SelectPageMenu extends PaginatedMenu {
     }
 
     @Override
-    public void setup() {
+    public void setup(Layer background, Layer foreground) {
         apply(new PaginationTemplate(this));
     }
 

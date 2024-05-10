@@ -50,7 +50,7 @@ public abstract class Menu {
         this.inventory = Bukkit.createInventory(player, getTotalSlots(), this.title);
     }
 
-    public abstract void setup();
+    public abstract void setup(Layer background, Layer foreground);
     public void onOpen() { }
     public void onClose() { }
     public void onClick(ButtonClick click) { }
@@ -58,7 +58,7 @@ public abstract class Menu {
     public void open() {
         handler.runTask(() -> {
             if (!setup) {
-                setup();
+                setup(background, foreground);
                 setup = true;
             }
 
