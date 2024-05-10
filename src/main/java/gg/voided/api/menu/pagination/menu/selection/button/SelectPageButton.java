@@ -1,8 +1,8 @@
-package gg.voided.api.menu.pagination.menu.selectpage.button;
+package gg.voided.api.menu.pagination.menu.selection.button;
 
 import gg.voided.api.menu.button.Button;
 import gg.voided.api.menu.button.ButtonClick;
-import gg.voided.api.menu.pagination.menu.selectpage.SelectPageMenu;
+import gg.voided.api.menu.pagination.menu.selection.SelectPageMenu;
 import gg.voided.api.menu.utils.Color;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
