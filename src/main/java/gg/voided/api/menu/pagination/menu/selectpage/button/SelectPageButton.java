@@ -1,8 +1,8 @@
-package gg.voided.api.menu.pagination.menu.select.button;
+package gg.voided.api.menu.pagination.menu.selectpage.button;
 
 import gg.voided.api.menu.button.Button;
 import gg.voided.api.menu.button.ButtonClick;
-import gg.voided.api.menu.pagination.menu.select.SelectPageMenu;
+import gg.voided.api.menu.pagination.menu.selectpage.SelectPageMenu;
 import gg.voided.api.menu.utils.Color;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
@@ -20,10 +20,11 @@ public class SelectPageButton extends Button {
 
     @Override
     public ItemStack getIcon() {
-        ItemStack item = new ItemStack(Material.BOOK);
+        boolean current = page == menu.getPage();
+        ItemStack item = new ItemStack(current ? Material.ENCHANTED_BOOK : Material.BOOK);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(Color.translate("&d&lPage " + page));
+        meta.setDisplayName(Color.translate("&d&lPage " + page + (current ? " &7(Selected)" : "")));
 
         List<String> lore = new ArrayList<>();
         lore.add("");

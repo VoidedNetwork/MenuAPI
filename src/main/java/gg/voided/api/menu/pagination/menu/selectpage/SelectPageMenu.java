@@ -1,9 +1,9 @@
-package gg.voided.api.menu.pagination.menu.select;
+package gg.voided.api.menu.pagination.menu.selectpage;
 
 import gg.voided.api.menu.MenuSize;
 import gg.voided.api.menu.button.Button;
 import gg.voided.api.menu.pagination.PaginatedMenu;
-import gg.voided.api.menu.pagination.menu.select.button.SelectPageButton;
+import gg.voided.api.menu.pagination.menu.selectpage.button.SelectPageButton;
 import gg.voided.api.menu.template.impl.PaginationTemplate;
 import lombok.Getter;
 

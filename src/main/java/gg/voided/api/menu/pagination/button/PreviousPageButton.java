@@ -3,7 +3,7 @@ package gg.voided.api.menu.pagination.button;
 import gg.voided.api.menu.button.Button;
 import gg.voided.api.menu.button.ButtonClick;
 import gg.voided.api.menu.pagination.PaginatedMenu;
-import gg.voided.api.menu.pagination.menu.select.SelectPageMenu;
+import gg.voided.api.menu.pagination.menu.selectpage.SelectPageMenu;
 import gg.voided.api.menu.utils.Color;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
