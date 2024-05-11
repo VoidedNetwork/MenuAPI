@@ -1,7 +1,7 @@
-package gg.voided.api.menu.button.impl;
+package gg.voided.api.menus.button.impl;
 
-import gg.voided.api.menu.button.Button;
-import gg.voided.api.menu.utils.Color;
+import gg.voided.api.menus.button.Button;
+import gg.voided.api.menus.utils.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

@@ -1,7 +1,7 @@
-package gg.voided.api.menu.listener;
+package gg.voided.api.menus.listener;
 
-import gg.voided.api.menu.Menu;
-import gg.voided.api.menu.MenuHandler;
+import gg.voided.api.menus.Menu;
+import gg.voided.api.menus.MenuHandler;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,6 +13,7 @@ public class ConnectionListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        handler.ifOpen(event.getPlayer(), Menu::close);
+        Menu menu = handler.getOpenMenus().get(event.getPlayer());
+        if (menu != null) menu.close();
     }
 }

@@ -1,4 +1,4 @@
-package gg.voided.api.menu.utils;
+package gg.voided.api.menus.utils;
 
 import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
@@ -8,7 +8,6 @@ import java.util.List;
 
 @UtilityClass
 public class Color {
-
     public String translate(String content) {
         return ChatColor.translateAlternateColorCodes('&', content);
     }
@@ -17,7 +16,7 @@ public class Color {
         List<String> translated = new ArrayList<>();
 
         for (String line : lines) {
-            translated.add(gg.voided.api.menus.utils.Color.translate(line));
+            translated.add(Color.translate(line));
         }
 
         return translated;

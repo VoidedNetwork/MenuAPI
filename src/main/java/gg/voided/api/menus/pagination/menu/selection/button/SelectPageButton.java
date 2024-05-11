@@ -1,9 +1,9 @@
-package gg.voided.api.menu.pagination.menu.selection.button;
+package gg.voided.api.menus.pagination.menu.selection.button;
 
-import gg.voided.api.menu.button.Button;
-import gg.voided.api.menu.button.ButtonClick;
-import gg.voided.api.menu.pagination.menu.selection.SelectPageMenu;
-import gg.voided.api.menu.utils.Color;
+import gg.voided.api.menus.button.Button;
+import gg.voided.api.menus.button.ButtonClick;
+import gg.voided.api.menus.pagination.menu.selection.SelectPageMenu;
+import gg.voided.api.menus.utils.Color;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;

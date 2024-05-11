@@ -1,9 +1,8 @@
-package gg.voided.api.menu;
+package gg.voided.api.menus;
 
-
-import gg.voided.api.menu.listener.ConnectionListener;
-import gg.voided.api.menu.listener.InventoryListener;
-import gg.voided.api.menu.task.AutoUpdateTask;
+import gg.voided.api.menus.listener.ConnectionListener;
+import gg.voided.api.menus.listener.InventoryListener;
+import gg.voided.api.menus.task.AutoUpdateTask;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -12,7 +11,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 
 @Getter
 public class MenuHandler {
@@ -36,36 +34,27 @@ public class MenuHandler {
         Bukkit.getPluginManager().registerEvents(new InventoryListener(this), plugin);
     }
 
-    public void ifOpen(Player player, Consumer<Menu> callback) {
-        Menu menu = openMenus.get(player);
-        if (menu != null) callback.accept(menu);
-    }
-
-    public void warning(String message) {
-        plugin.getLogger().warning("[MenuAPI] " + message);
-    }
-
-    protected void runSync(Runnable task) {
+    public void runSync(Runnable task) {
         if (Bukkit.isPrimaryThread()) {
-            runAsync(task, false);
+            task.run();
         } else {
             Bukkit.getScheduler().runTask(plugin, task);
         }
     }
 
-    protected void runAsync(Runnable task, boolean async) {
-        if (async) {
-            runTask(task, true);
-        } else {
-            task.run();
-        }
-    }
-
-    protected void runTask(Runnable task, boolean async) {
+    public void runTask(Runnable task, boolean async) {
         if (async) {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, task);
         } else {
             runSync(task);
+        }
+    }
+
+    public void runCurrent(Runnable task, boolean current) {
+        if (current) {
+            task.run();
+        } else {
+            runTask(task, true);
         }
     }
 }

@@ -1,7 +1,7 @@
-package gg.voided.api.menu.listener;
+package gg.voided.api.menus.listener;
 
-import gg.voided.api.menu.Menu;
-import gg.voided.api.menu.MenuHandler;
+import gg.voided.api.menus.Menu;
+import gg.voided.api.menus.MenuHandler;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,18 +14,23 @@ public class InventoryListener implements Listener {
     private final MenuHandler handler;
 
     @EventHandler
-    public void onClick(InventoryClickEvent event) {
+    private void onClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) return;
 
-        handler.ifOpen((Player) event.getWhoClicked(), (menu) -> {
-            event.setCancelled(true);
-            menu.click(event);
-        });
+        Menu menu = handler.getOpenMenus().get((Player) event.getWhoClicked());
+        if (menu == null) return;
+
+        event.setCancelled(true);
+        menu.click(event);
     }
 
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) return;
-        handler.ifOpen((Player) event.getPlayer(), Menu::close);
+
+        Menu menu = handler.getOpenMenus().get((Player) event.getPlayer());
+        if (menu == null) return;
+
+        menu.close();
     }
 }

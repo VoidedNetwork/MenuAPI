@@ -1,11 +1,11 @@
-package gg.voided.api.menu.pagination.menu.selection;
+package gg.voided.api.menus.pagination.menu.selection;
 
-import gg.voided.api.menu.MenuSize;
-import gg.voided.api.menu.button.Button;
-import gg.voided.api.menu.layer.Layer;
-import gg.voided.api.menu.pagination.PaginatedMenu;
-import gg.voided.api.menu.pagination.menu.selection.button.SelectPageButton;
-import gg.voided.api.menu.template.impl.PaginationTemplate;
+import gg.voided.api.menus.MenuSize;
+import gg.voided.api.menus.button.Button;
+import gg.voided.api.menus.layer.Layer;
+import gg.voided.api.menus.pagination.PaginatedMenu;
+import gg.voided.api.menus.pagination.menu.selection.button.SelectPageButton;
+import gg.voided.api.menus.template.impl.PaginationTemplate;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class SelectPageMenu extends PaginatedMenu {
     }
 
     @Override
-    public List<Button> getPaginatedButtons() {
+    public List<Button> getEntries() {
         List<Button> buttons = new ArrayList<>();
 
         for (int i = 0; i < paginatedMenu.getTotalPages(); i++) {

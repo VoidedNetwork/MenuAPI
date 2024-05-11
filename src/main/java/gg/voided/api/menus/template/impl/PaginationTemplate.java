@@ -1,13 +1,13 @@
-package gg.voided.api.menu.template.impl;
+package gg.voided.api.menus.template.impl;
 
-import gg.voided.api.menu.Menu;
-import gg.voided.api.menu.button.Button;
-import gg.voided.api.menu.layer.Layer;
-import gg.voided.api.menu.pagination.PaginatedMenu;
-import gg.voided.api.menu.pagination.PaginationButton;
-import gg.voided.api.menu.pagination.button.NextPageButton;
-import gg.voided.api.menu.pagination.button.PreviousPageButton;
-import gg.voided.api.menu.template.Template;
+import gg.voided.api.menus.Menu;
+import gg.voided.api.menus.button.Button;
+import gg.voided.api.menus.layer.Layer;
+import gg.voided.api.menus.pagination.PaginatedMenu;
+import gg.voided.api.menus.pagination.PaginationButton;
+import gg.voided.api.menus.pagination.button.NextPageButton;
+import gg.voided.api.menus.pagination.button.PreviousPageButton;
+import gg.voided.api.menus.template.Template;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
