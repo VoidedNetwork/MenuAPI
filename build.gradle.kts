@@ -5,7 +5,7 @@ plugins {
 }
 
 val library = "MenuAPI"
-val version = "2.0"
+val version = "1.0"
 
 repositories {
     mavenCentral()

@@ -8,6 +8,7 @@ import java.util.List;
 
 @UtilityClass
 public class Color {
+    public static final String RESET = ChatColor.RESET.toString();
 
     public String translate(String content) {
         return ChatColor.translateAlternateColorCodes('&', content);
@@ -17,7 +18,7 @@ public class Color {
         List<String> translated = new ArrayList<>();
 
         for (String line : lines) {
-            translated.add(gg.voided.api.menus.utils.Color.translate(line));
+            translated.add(translate(line));
         }
 
         return translated;

@@ -4,12 +4,14 @@ import gg.voided.api.menu.Menu;
 import gg.voided.api.menu.button.Button;
 import gg.voided.api.menu.pagination.PaginationButton;
 import gg.voided.api.menu.utils.Pair;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 @RequiredArgsConstructor
 public abstract class Layer {
     private final Menu menu;
@@ -84,6 +86,11 @@ public abstract class Layer {
     public void center(Button button, int inset) {
         if (menu.getRows() < inset * 2 + 1) return;
 
+        if (inset < 1) {
+            fill(button);
+            return;
+        }
+
         for (int x = inset; x < Menu.COLUMNS - inset; x++) {
             for (int y = inset; y < menu.getRows() - inset; y++) {
                 set(x, y, button);
@@ -131,34 +138,23 @@ public abstract class Layer {
         );
     }
 
-    public Map<Integer, Button> getButtons(Map<Integer, Button> placed) {
+    public Map<Integer, Button> getButtons(ItemStack[] icons) {
         Map<Integer, Button> buttons = new HashMap<>();
-        int paginationIndex = 0;
 
-        for (Map.Entry<Integer, Button> entry : this.buttons.entrySet()) {
-            int slot = entry.getKey();
-            if (placed != null && placed.get(slot) != null) continue;
-
-            Button button = entry.getValue();
+        this.buttons.forEach((slot, button) -> {
+            if (icons != null && icons[slot] != null) return;
 
             if (button instanceof PaginationButton) {
-                ((PaginationButton) button).setIconIndex(++paginationIndex);
+                ((PaginationButton) button).setIconSlot(slot);
             }
 
             ItemStack icon = button.getIcon();
-            if (icon != null) buttons.put(slot, button);
-        }
 
-        return buttons;
-    }
-
-    // TODO: maybe remove
-    public static Map<Integer, Button> merge(Layer ...layers) {
-        Map<Integer, Button> buttons = new HashMap<>();
-
-        for (Layer layer : layers) {
-            buttons.putAll(layer.getButtons(buttons));
-        }
+            if (icon != null) {
+                if (icons != null) icons[slot] = icon;
+                buttons.put(slot, button);
+            }
+        });
 
         return buttons;
     }

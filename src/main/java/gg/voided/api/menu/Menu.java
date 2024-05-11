@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,23 +55,48 @@ public abstract class Menu {
     public void onClose() { }
     public void onClick(ButtonClick click) { }
 
-    //TODO: Sync menu long duration warning (open, update, etc)
     public void open() {
+        handler.runTask(() -> {
+            if (!setup) {
+                setup(background, foreground);
+                setup = true;
+            }
 
+            refresh();
+
+            handler.runSync(() -> {
+                if (handler.isResetCursor()) player.closeInventory();
+                player.openInventory(inventory);
+
+                handler.getOpenMenus().put(player, this);
+                handler.runAsync(this::onOpen, async);
+            });
+        }, async);
     }
 
     public void close() {
-
+        handler.runSync(() -> {
+            player.closeInventory();
+            handler.runAsync(this::onClose, async);
+        });
     }
 
-    protected void update(boolean async) {
-        handler.runAsync(() -> {
+    protected void refresh() {
+        lastUpdate = handler.getAutoUpdateTask().getTicks();
+        buttons.clear();
 
+        ItemStack[] icons = new ItemStack[getTotalSlots()];
+        buttons.putAll(foreground.getButtons(icons));
+        buttons.putAll(background.getButtons(icons));
+
+        handler.runSync(() -> {
+            inventory.setContents(icons);
+            player.updateInventory();
         });
     }
 
     public void update() {
-        update(is);
+        handler.runTask(this::refresh, async);
     }
 
     public void back() {
@@ -95,6 +121,10 @@ public abstract class Menu {
 
             button.onClick(click);
         }, async);
+    }
+
+    public boolean hasPreviousMenu() {
+        return previousMenu != null;
     }
 
     public int getTotalSlots() {
