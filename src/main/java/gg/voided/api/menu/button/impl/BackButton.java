@@ -28,7 +28,9 @@ public class BackButton extends Button {
 
         List<String> lore = new ArrayList<>();
         lore.add("");
-        lore.add("&dGo Page &7(Left Click");
+        lore.add("&7Return to the previous menu");
+        lore.add("");
+        lore.add("&dGo Back &7(Left Click)");
 
         meta.setLore(Color.translate(lore));
         item.setItemMeta(meta);
