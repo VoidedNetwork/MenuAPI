@@ -76,4 +76,8 @@ public abstract class PaginatedMenu extends Menu {
     public int getEntrySlots() {
         return indexCache.size();
     }
+
+    public int getPageIndex() {
+        return page - 1;
+    }
 }
