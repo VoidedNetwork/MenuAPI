@@ -37,7 +37,7 @@ public abstract class PaginatedMenu extends Menu {
 
         for (Map.Entry<Integer, Button> entry : getForeground().getButtons().entrySet()) {
             if (entry.getValue() instanceof PaginationButton) {
-                indexCache.put(entry.getKey(), ++index);
+                indexCache.put(entry.getKey(), index++);
             }
         }
 
