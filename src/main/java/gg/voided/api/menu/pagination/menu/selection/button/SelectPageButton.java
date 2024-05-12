@@ -20,7 +20,7 @@ public class SelectPageButton extends Button {
 
     @Override
     public ItemStack getIcon() {
-        boolean current = page == menu.getPage();
+        boolean current = page == menu.getPaginatedMenu().getPage();
 
         ItemStack item = new ItemStack(current ? Material.ENCHANTED_BOOK : Material.BOOK);
         ItemMeta meta = item.getItemMeta();
