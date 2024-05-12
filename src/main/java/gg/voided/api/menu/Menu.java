@@ -65,20 +65,29 @@ public abstract class Menu {
             refresh();
 
             handler.runSync(() -> {
-                if (handler.isResetCursor()) player.closeInventory();
-                player.openInventory(inventory);
+                Menu existing = handler.getOpenMenus().get(player);
 
+                if (existing == null) {
+                    player.closeInventory();
+                } else {
+                    existing.close(handler.isResetCursor());
+                }
+
+                player.openInventory(inventory);
                 handler.getOpenMenus().put(player, this);
                 handler.runAsync(this::onOpen, async);
             });
         }, async);
     }
 
+    public void close(boolean exit) {
+        if (exit) player.closeInventory();
+        handler.getOpenMenus().remove(player, this);
+        handler.runAsync(this::onClose, async);
+    }
+
     public void close() {
-        handler.runSync(() -> {
-            player.closeInventory();
-            handler.runAsync(this::onClose, async);
-        });
+        close(true);
     }
 
     protected void refresh() {

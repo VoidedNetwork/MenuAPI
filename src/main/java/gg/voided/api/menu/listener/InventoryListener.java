@@ -1,6 +1,5 @@
 package gg.voided.api.menu.listener;
 
-import gg.voided.api.menu.Menu;
 import gg.voided.api.menu.MenuHandler;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
@@ -26,6 +25,6 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) return;
-        handler.ifOpen((Player) event.getPlayer(), Menu::close);
+        handler.ifOpen((Player) event.getPlayer(), (menu -> menu.close(false)));
     }
 }
