@@ -15,15 +15,15 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Getter
 public abstract class Menu {
     public static final int COLUMNS = 9;
 
     private final MenuHandler handler = MenuHandler.getInstance();
-    private final Map<Integer, Button> buttons = new HashMap<>();
+    private final Map<Integer, Button> buttons = new TreeMap<>();
 
     private final Player player;
     private final Inventory inventory;

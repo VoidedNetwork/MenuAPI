@@ -10,12 +10,13 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Getter
 @RequiredArgsConstructor
 public abstract class Layer {
     private final Menu menu;
-    private final Map<Integer, Button> buttons = new HashMap<>();
+    private final Map<Integer, Button> buttons = new TreeMap<>();
 
     public abstract String getName();
 
