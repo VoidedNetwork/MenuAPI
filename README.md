@@ -11,6 +11,12 @@ Simple to use, high performance bukkit menu api.
 - Auto update annotation
 - Small and lightweight (~32kb)
 
+## Support
+
+If you need any assistance using or installing my MenuAPI,
+feel free to contact me by either adding me on discord (@J4C0B3Y)
+or by creating an issue and explaining your problem or question.
+
 ## Installation
 
 Prebuilt jars can be found in [releases](https://github.com/VoidedNetwork/MenuAPI/releases).
