@@ -13,10 +13,27 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A styled back button that returns to the previous menu,
+ * if there is no previous menu, the icon will not show.
+ *
+ * @author J4C0B3Y
+ * @version MenuAPI
+ * @since 12/05/2024
+ */
 @RequiredArgsConstructor
 public class BackButton extends Button {
+    /**
+     * The menu to go back from.
+     */
     private final Menu menu;
 
+    /**
+     * A styles back icon that says
+     * return to the previous menu.
+     *
+     * @return The back button icon.
+     */
     @Override
     public ItemStack getIcon() {
         if (!menu.hasPreviousMenu()) return null;
@@ -38,6 +55,11 @@ public class BackButton extends Button {
         return item;
     }
 
+    /**
+     * Returns to the previous menu when left-clicked.
+     *
+     * @param click The button click.
+     */
     @Override
     public void onClick(ButtonClick click) {
         if (click.getType().equals(ClickType.LEFT)) menu.back();

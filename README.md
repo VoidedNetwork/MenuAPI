@@ -1,27 +1,31 @@
 # MenuAPI
 
-Simple to use, high performance bukkit menu API.
+Simple to use, high performance bukkit menu api.
 
 ## Features
 
-- Quick and simple usage
-- Paginated menus
+- Inbuilt paginated menus
+- Asynchronous menu option
+- Foreground & background layers
+- Reusable layer templates
 - Auto update annotation
-- Asynchronous menus
-- Layers & Templates
-- Built for performance
+- Small and lightweight (~32kb)
 
-## Usage
+## Installation
 
-Please see this repo's [wiki](https://github.com/VoidedNetwork/MenuAPI/wiki) for API usage and examples.
+Prebuilt jars can be found in [releases](https://github.com/VoidedNetwork/MenuAPI/releases).
 
-## Building
+> **NOTE:** <br/>
+> Please relocate the library as multiple menu handlers can
+> cause problems with other plugins that also use the MenuAPI.
+
+### Building
 
 1. Clone this repository and enter its directory.
 2. Run the intellij build configuration by clicking the top right icon.
 3. Alternatively you can run `gradle classes shadowJar delete copy`.
 4. The output jar file will be located in the `jars` directory.
 
-> **NOTE:** <br/>
-> Please relocate the library as multiple menu handlers can
-> cause problems with other plugins that also use the MenuAPI.
+## Usage
+
+### Buttons

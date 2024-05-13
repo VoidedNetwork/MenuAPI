@@ -6,6 +6,7 @@ import gg.voided.api.menu.pagination.menu.selection.SelectPageMenu;
 import gg.voided.api.menu.utils.Color;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,11 +14,32 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A styled button that when clicked,
+ * changes the page of a pagination menu.
+ *
+ * @author J4C0B3Y
+ * @version MenuAPI
+ * @since 12/05/2024
+ */
 @RequiredArgsConstructor
 public class SelectPageButton extends Button {
+    /**
+     * The target page.
+     */
     private final int page;
+
+    /**
+     * The select page menu.
+     */
     private final SelectPageMenu menu;
 
+    /**
+     * Returns a styled book item that is
+     * enchanted if it is the selected page.
+     *
+     * @return The select page icon.
+     */
     @Override
     public ItemStack getIcon() {
         boolean current = page == menu.getPaginatedMenu().getPage();
@@ -38,6 +60,12 @@ public class SelectPageButton extends Button {
         return item;
     }
 
+    /**
+     * If the button is left-clicked, the paginated menu's
+     * page will be set and the select page menu will be closed.
+     *
+     * @param click The button click.
+     */
     @Override
     public void onClick(ButtonClick click) {
         if (!click.getType().equals(ClickType.LEFT)) return;

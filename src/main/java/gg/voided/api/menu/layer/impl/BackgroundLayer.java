@@ -3,25 +3,64 @@ package gg.voided.api.menu.layer.impl;
 import gg.voided.api.menu.Menu;
 import gg.voided.api.menu.button.Button;
 import gg.voided.api.menu.layer.Layer;
-import gg.voided.api.menu.pagination.PaginationButton;
+import gg.voided.api.menu.pagination.PaginationSlot;
 
+/**
+ * Represents a background layer in a menu with
+ * many methods to manipulate the layer's content.
+ *
+ * @author J4C0B3Y
+ * @version MenuAPI
+ * @since 12/05/2024
+ */
 public class BackgroundLayer extends Layer {
-
+    /**
+     * Creates a new background layer.
+     *
+     * @param menu The menu the layer belongs to.
+     */
     public BackgroundLayer(Menu menu) {
         super(menu);
     }
 
+    /**
+     * Returns the name of the background layer.
+     *
+     * @return The background layer name.
+     */
     @Override
     public String getName() {
         return "background";
     }
 
+    /**
+     * Adds a button to the next available slot,
+     * checking slots in the foreground layer as well.
+     *
+     * @param button The button to add.
+     * @param other If the foreground layer should be checked.
+     */
+    @Override
+    public void add(Button button, boolean other) {
+        add(button, other ? getMenu().getForeground() : null);
+    }
+
+    /**
+     * Checks if a button to be set is invalid,
+     * if so sends a warning message.
+     * Also prevents pagination slots from
+     * being added to the background layer.
+     *
+     * @param button The button to check
+     * @param index The index to check
+     * @return If the button or index is invalid.
+     */
     @Override
     protected boolean isInvalid(Button button, int index) {
         if (super.isInvalid(button, index)) return true;
 
-        if (button instanceof PaginationButton) {
-            warning("pagination", button, index);
+        if (button instanceof PaginationSlot) {
+            warning("pagination slot", button, index);
             return true;
         }
 
