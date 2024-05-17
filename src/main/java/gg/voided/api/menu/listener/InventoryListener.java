@@ -1,5 +1,6 @@
 package gg.voided.api.menu.listener;
 
+import gg.voided.api.menu.Menu;
 import gg.voided.api.menu.MenuHandler;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
@@ -7,9 +8,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
- * Handles inventories being clicked or closed.
+ * Handles inventories being clicked or closed,
+ * also closing the inventory when players quit.
  *
  * @author J4C0B3Y
  * @version MenuAPI
@@ -48,5 +51,15 @@ public class InventoryListener implements Listener {
     public void onClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) return;
         handler.ifOpen((Player) event.getPlayer(), (menu -> menu.close(false)));
+    }
+
+    /**
+     * Closes a players menu when they leave the game.
+     *
+     * @param event The quit event.
+     */
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        handler.ifOpen(event.getPlayer(), Menu::close);
     }
 }

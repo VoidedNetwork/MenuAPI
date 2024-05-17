@@ -1,7 +1,6 @@
 package gg.voided.api.menu;
 
 
-import gg.voided.api.menu.listener.ConnectionListener;
 import gg.voided.api.menu.listener.InventoryListener;
 import gg.voided.api.menu.task.AutoUpdateTask;
 import lombok.Getter;
@@ -69,8 +68,6 @@ public class MenuHandler {
 
         autoUpdateTask = new AutoUpdateTask(this);
         Bukkit.getScheduler().runTaskTimer(plugin, autoUpdateTask, 0, 1);
-
-        Bukkit.getPluginManager().registerEvents(new ConnectionListener(this), plugin);
         Bukkit.getPluginManager().registerEvents(new InventoryListener(this), plugin);
     }
 
