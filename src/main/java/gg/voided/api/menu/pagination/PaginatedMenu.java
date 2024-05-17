@@ -93,7 +93,7 @@ public abstract class PaginatedMenu extends Menu {
             (int) Math.ceil((double) paginationEntries.size() / getPaginationSlots()), MINIMUM_PAGE
         );
 
-        // Corrects the page number from MINIMUM_PAGE to the total page count.
+        // Clamps the page number from MINIMUM_PAGE to the total page count.
         page = Math.min(Math.max(page, MINIMUM_PAGE), totalPages);
 
         // Refreshes the menu to reflect the changes.
