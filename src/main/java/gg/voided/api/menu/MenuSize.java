@@ -43,5 +43,8 @@ public enum MenuSize {
      */
     SIX(6);
 
+    /**
+     * How many rows the menu has.
+     */
     private final int rows;
 }
