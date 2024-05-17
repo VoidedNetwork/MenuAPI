@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -102,7 +103,7 @@ public class MenuHandler {
      */
     protected void runSync(Runnable task) {
         if (Bukkit.isPrimaryThread()) {
-            runAsync(task, false);
+            task.run();
         } else {
             Bukkit.getScheduler().runTask(plugin, task);
         }
@@ -116,7 +117,7 @@ public class MenuHandler {
      */
     protected void runAsync(Runnable task, boolean async) {
         if (async) {
-            runTask(task, true);
+            CompletableFuture.runAsync(task);
         } else {
             task.run();
         }
@@ -130,7 +131,7 @@ public class MenuHandler {
      */
     protected void runTask(Runnable task, boolean async) {
         if (async) {
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, task);
+            CompletableFuture.runAsync(task);
         } else {
             runSync(task);
         }
