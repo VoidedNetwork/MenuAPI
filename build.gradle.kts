@@ -28,3 +28,15 @@ tasks {
         doLast { file("jars").deleteRecursively() }
     }
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            groupId = "gg.voided"
+            artifactId = "MenuAPI"
+            version = version
+
+            from(components["java"])
+        }
+    }
+}
