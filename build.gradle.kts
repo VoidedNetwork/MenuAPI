@@ -5,8 +5,8 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-val library = "MenuAPI"
-val version = "1.0"
+var library = "MenuAPI"
+version = "1.0"
 
 repositories {
     mavenCentral()
