@@ -1,5 +1,6 @@
 package gg.voided.api.menu;
 
+import gg.voided.api.menu.annotation.Async;
 import gg.voided.api.menu.button.Button;
 import gg.voided.api.menu.button.ButtonClick;
 import gg.voided.api.menu.layer.impl.BackgroundLayer;
@@ -81,7 +82,7 @@ public abstract class Menu {
     /**
      * If the menu should be asynchronous.
      */
-    @Setter private boolean async = false;
+    @Setter private boolean async;
 
     /**
      * The last tick that the menu was updated.
@@ -113,6 +114,8 @@ public abstract class Menu {
 
         this.title = Color.translate(title);
         this.inventory = Bukkit.createInventory(player, getTotalSlots(), this.title);
+
+        this.async = getClass().isAnnotationPresent(Async.class);
     }
 
     /**
