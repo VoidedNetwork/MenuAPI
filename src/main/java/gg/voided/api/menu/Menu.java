@@ -16,8 +16,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * A wrapper around a bukkit inventory with
@@ -42,7 +42,7 @@ public abstract class Menu {
     /**
      * The buttons shown inside the inventory.
      */
-    private final Map<Integer, Button> buttons = new TreeMap<>();
+    private final Map<Integer, Button> buttons = new HashMap<>();
 
     /**
      * The player associated with the menu.

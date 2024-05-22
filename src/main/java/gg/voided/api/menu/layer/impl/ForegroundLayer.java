@@ -4,6 +4,8 @@ import gg.voided.api.menu.Menu;
 import gg.voided.api.menu.button.Button;
 import gg.voided.api.menu.layer.Layer;
 
+import java.util.TreeMap;
+
 /**
  * Represents a foreground layer in a menu with
  * many methods to manipulate the layer's content.
@@ -13,13 +15,14 @@ import gg.voided.api.menu.layer.Layer;
  * @since 12/05/2024
  */
 public class ForegroundLayer extends Layer {
+
     /**
      * Creates a new foreground layer.
      *
      * @param menu The menu the layer belongs to.
      */
     public ForegroundLayer(Menu menu) {
-        super(menu);
+        super(menu, new TreeMap<>());
     }
 
     /**

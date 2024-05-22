@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Represents a layer of buttons in a menu with
@@ -29,10 +28,10 @@ public abstract class Layer {
     private final Menu menu;
 
     /**
-     * The buttons in the layer, this is a tree map
-     * so the buttons are sorted for pagination.
+     * The buttons in the layer, this is a tree map in the
+     * foreground so the buttons are sorted for pagination.
      */
-    private final Map<Integer, Button> buttons = new TreeMap<>();
+    private final Map<Integer, Button> buttons;
 
     /**
      * The name of the layer which

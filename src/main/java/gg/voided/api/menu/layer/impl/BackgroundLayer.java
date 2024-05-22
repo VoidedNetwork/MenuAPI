@@ -5,6 +5,8 @@ import gg.voided.api.menu.button.Button;
 import gg.voided.api.menu.layer.Layer;
 import gg.voided.api.menu.pagination.PaginationSlot;
 
+import java.util.HashMap;
+
 /**
  * Represents a background layer in a menu with
  * many methods to manipulate the layer's content.
@@ -20,7 +22,7 @@ public class BackgroundLayer extends Layer {
      * @param menu The menu the layer belongs to.
      */
     public BackgroundLayer(Menu menu) {
-        super(menu);
+        super(menu, new HashMap<>());
     }
 
     /**
