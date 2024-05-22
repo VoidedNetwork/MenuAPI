@@ -151,6 +151,9 @@ public abstract class Menu {
      * The setup method is called on the first invocation of this method.
      */
     public void open() {
+        // This will schedule at most 1 task using the bukkit scheduler.
+        // Usually none, except when the menu is async or the menu is
+        // sync and opened not on the server thread.
         handler.runTask(() -> {
             if (!setup) {
                 setup(background, foreground);
