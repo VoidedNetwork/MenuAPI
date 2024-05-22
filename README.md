@@ -304,6 +304,7 @@ public class TagsMenu extends PaginatedMenu {
         
         // Add the inbuilt pagination slot button where 
         // you want your paginated buttons / entries to go.
+        // NOTE: You cannot add pagination slots to the background layer.
         foreground.center(new PaginationSlot());
 
         // You can also add your own previous page and next page buttons.
