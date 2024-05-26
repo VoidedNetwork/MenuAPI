@@ -9,7 +9,7 @@ Simple to use, high performance bukkit menu api.
 - Foreground & background layers
 - Reusable layer templates
 - Auto update annotation
-- Small and lightweight (~32kb)
+- Small and lightweight (~22kb)
 - Supports spigot 1.8+
 
 ## Support
