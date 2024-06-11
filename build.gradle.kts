@@ -5,12 +5,15 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-var library = "MenuAPI"
-version = "1.2"
+object Project {
+    const val NAME = "MenuAPI"
+    const val GROUP = "gg.voided"
+    const val VERSION = "1.2"
+}
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://repo.codemc.io/repository/nms/") }
+    maven("https://repo.codemc.io/repository/nms/")
 }
 
 dependencies {
@@ -20,7 +23,7 @@ dependencies {
 tasks {
     register<Copy>("copy") {
         from(named("shadowJar"))
-        rename("(.*)-all.jar", "$library-$version.jar")
+        rename("(.*)-all.jar", "${Project.NAME}-${Project.VERSION}.jar")
         into(file("jars"))
     }
 
@@ -32,9 +35,9 @@ tasks {
 publishing {
     publications {
         create<MavenPublication>("release") {
-            groupId = "gg.voided"
-            artifactId = "MenuAPI"
-            version = version
+            artifactId = Project.NAME
+            groupId = Project.GROUP
+            version = Project.VERSION
 
             from(components["java"])
         }
