@@ -1,14 +1,17 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     id("java")
     id("maven-publish")
-    id("io.freefair.lombok") version "8.4"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.freefair.lombok") version "8.10"
+    id("com.gradleup.shadow") version "8.3.0"
 }
 
 object Project {
     const val NAME = "MenuAPI"
     const val GROUP = "gg.voided"
-    const val VERSION = "1.2"
+    const val AUTHOR = "J4C0B3Y"
+    const val VERSION = "1.3"
 }
 
 repositories {
@@ -20,6 +23,10 @@ dependencies {
     compileOnly("org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT")
 }
 
+java {
+    withSourcesJar()
+}
+
 tasks {
     register<Copy>("copy") {
         from(named("shadowJar"))
@@ -28,7 +35,11 @@ tasks {
     }
 
     register("delete") {
-        doLast { file("jars").deleteRecursively() }
+        file("jars").deleteRecursively()
+    }
+
+    register("install") {
+        dependsOn(named("publishReleasePublicationToMavenLocal"))
     }
 }
 
@@ -39,7 +50,11 @@ publishing {
             groupId = Project.GROUP
             version = Project.VERSION
 
-            from(components["java"])
+            artifact(tasks.named<ShadowJar>("shadowJar").get().archiveFile)
+
+            artifact(tasks.named<Jar>("sourcesJar").get().archiveFile) {
+                classifier = "sources"
+            }
         }
     }
 }
