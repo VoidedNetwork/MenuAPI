@@ -32,7 +32,7 @@ Replace `VERSION` with the latest release version on GitHub.
 
 ```kts
 repositories {
-    maven { url = uri("https://jitpack.io") }
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -61,7 +61,7 @@ dependencies {
 
 1. Clone this repository and enter its directory.
 2. Run the intellij build configuration by clicking the top right icon.
-3. Alternatively you can run `gradle classes shadowJar delete copy`.
+3. Alternatively you can run `gradle classes shadow delete copy install`.
 4. The output jar file will be located in the `jars` directory.
 
 ## Usage
@@ -135,7 +135,7 @@ public void onClick(ButtonClick click) {
 }
 ```
 
-To make a menu asynchronous you can do one of two things.
+To make a menu asynchronous you can annotate the class with `@Async`.
 
 > **WARNING:** <br/>
 > Using bukkit api methods in async menus is not recommended, this is
@@ -144,14 +144,7 @@ To make a menu asynchronous you can do one of two things.
 ```java
 @Async // Annotate the class with @Async
 public class ExampleMenu extends Menu {
-    
-    public ExampleMenu(Player player) {
-        super("Example Menu", MenuSize.THREE, player);
-        
-        // or use setAsync in the constructor,
-        // which overrides the annotation.
-        setAsync(true);
-    }
+    // ...
 }
 ```
 
