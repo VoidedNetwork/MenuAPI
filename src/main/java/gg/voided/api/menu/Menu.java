@@ -81,7 +81,7 @@ public abstract class Menu {
     /**
      * If the menu should be asynchronous.
      */
-    @Setter private boolean async;
+    private final boolean async;
 
     /**
      * The last tick that the menu was updated.
