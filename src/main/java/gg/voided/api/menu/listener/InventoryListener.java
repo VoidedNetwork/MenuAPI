@@ -33,7 +33,9 @@ public class InventoryListener implements Listener {
      */
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (!(event.getWhoClicked() instanceof Player)) return;
+        if (!(event.getWhoClicked() instanceof Player)) {
+            return;
+        }
 
         handler.ifOpen((Player) event.getWhoClicked(), (menu) -> {
             event.setCancelled(true);
@@ -49,7 +51,10 @@ public class InventoryListener implements Listener {
      */
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
-        if (!(event.getPlayer() instanceof Player)) return;
+        if (!(event.getPlayer() instanceof Player)) {
+            return;
+        }
+
         handler.ifOpen((Player) event.getPlayer(), (menu -> menu.close(false)));
     }
 

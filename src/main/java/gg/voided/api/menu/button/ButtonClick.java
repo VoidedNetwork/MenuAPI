@@ -53,7 +53,7 @@ public class ButtonClick {
      * If the click should be ignored,
      * and not send to the button's handler.
      */
-    @Setter private boolean ignored = false;
+    @Setter private boolean ignored;
 
     /**
      * Creates a new button click, extracting

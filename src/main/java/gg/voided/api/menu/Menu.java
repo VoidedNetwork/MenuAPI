@@ -184,7 +184,10 @@ public abstract class Menu {
      * @param exit If the player's inventory should be closed.
      */
     public void close(boolean exit) {
-        if (exit) player.closeInventory();
+        if (exit) {
+            player.closeInventory();
+        }
+
         handler.getOpenMenus().remove(player, this);
         handler.runAsync(this::onClose, async);
     }
@@ -226,10 +229,13 @@ public abstract class Menu {
      * menu, then the menu will close.
      */
     public void back() {
-        if (previousMenu == null) {
-            if (handler.isCloseOnBack()) close();
-        } else {
+        if (previousMenu != null) {
             previousMenu.open();
+            return;
+        }
+
+        if (handler.isCloseOnBack()) {
+            close();
         }
     }
 
@@ -253,7 +259,10 @@ public abstract class Menu {
             ButtonClick click = new ButtonClick(event, button, this);
 
             onClick(click);
-            if (button == null || click.isIgnored()) return;
+
+            if (button == null || click.isIgnored()) {
+                return;
+            }
 
             button.onClick(click);
         }, async);

@@ -34,7 +34,10 @@ public class AutoUpdateTask implements Runnable {
     public void run() {
         for (Menu menu : handler.getOpenMenus().values()) {
             AutoUpdate annotation = menu.getClass().getAnnotation(AutoUpdate.class);
-            if (annotation == null || ticks - menu.getLastUpdate() < annotation.value()) continue;
+
+            if (annotation == null || ticks - menu.getLastUpdate() < annotation.value()) {
+                continue;
+            }
 
             menu.update();
         }

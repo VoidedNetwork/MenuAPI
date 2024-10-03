@@ -49,7 +49,10 @@ public abstract class Layer {
      * @param button The button to set.
      */
     public void set(int index, Button button) {
-        if (isInvalid(button, index)) return;
+        if (isInvalid(button, index)) {
+            return;
+        }
+
         buttons.put(index, button);
     }
 
@@ -83,8 +86,13 @@ public abstract class Layer {
      */
     protected void add(Button button, Layer other) {
         for (int i = 0; i < menu.getTotalSlots(); i++) {
-            if (buttons.get(i) != null) continue;
-            if (other != null && other.getButtons().get(i) != null) continue;
+            if (buttons.get(i) != null) {
+                continue;
+            }
+
+            if (other != null && other.getButtons().get(i) != null) {
+                continue;
+            }
 
             set(i, button);
             return;
@@ -195,10 +203,16 @@ public abstract class Layer {
      */
     public void border(Button button) {
         row(0, button);
-        if (menu.getRows() < 2) return;
+
+        if (menu.getRows() < 2) {
+            return;
+        }
 
         row(menu.getRows() - 1, button);
-        if (menu.getRows() < 3) return;
+
+        if (menu.getRows() < 3) {
+            return;
+        }
 
         column(0, button);
         column(Menu.COLUMNS - 1, button);
@@ -211,7 +225,9 @@ public abstract class Layer {
      * @param inset The inset.
      */
     public void center(Button button, int inset) {
-        if (menu.getRows() < inset * 2 + 1) return;
+        if (menu.getRows() < inset * 2 + 1) {
+            return;
+        }
 
         if (inset < 1) {
             fill(button);
@@ -321,7 +337,9 @@ public abstract class Layer {
 
         this.buttons.forEach((slot, button) -> {
             // Return if the icons array already has an icon in the slot.
-            if (icons != null && icons[slot] != null) return;
+            if (icons != null && icons[slot] != null) {
+                return;
+            }
 
             // If the button is a pagination slot, set the icon
             // index so the slot can calculate which entry to show.

@@ -61,7 +61,9 @@ public class PaginationSlot extends Button {
 
         // If the index lies outside the list of entries there is
         // no entry for that slot and no icon should be displayed.
-        if (index >= menu.getPaginationEntries().size()) return null;
+        if (index >= menu.getPaginationEntries().size()) {
+            return null;
+        }
 
         return menu.getPaginationEntries().get(index);
     }
