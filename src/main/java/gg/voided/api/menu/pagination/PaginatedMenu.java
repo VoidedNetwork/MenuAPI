@@ -133,7 +133,7 @@ public abstract class PaginatedMenu extends Menu {
      * @return If there is a next page.
      */
     public boolean hasNextPage() {
-        return page < getTotalPages();
+        return page < totalPages;
     }
 
     /**
