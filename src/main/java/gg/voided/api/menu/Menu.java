@@ -36,7 +36,7 @@ public abstract class Menu {
     /**
      * The menu handler the menu should use.
      */
-    private final MenuHandler handler = MenuHandler.getInstance();
+    private final MenuHandler handler;
 
     /**
      * The buttons shown inside the inventory.
@@ -66,12 +66,12 @@ public abstract class Menu {
     /**
      * The menu's foreground layer.
      */
-    private final ForegroundLayer foreground;
+    private final ForegroundLayer foreground = new ForegroundLayer(this);
 
     /**
      * The menu's background layer.
      */
-    private final BackgroundLayer background;
+    private final BackgroundLayer background = new BackgroundLayer(this);
 
     /**
      * The previous menu, if present.
@@ -99,22 +99,31 @@ public abstract class Menu {
      * @param title The title, auto translated.
      * @param size The menu size, in rows.
      * @param player The player to open the menu with.
+     * @param handler The handler to open the menu with.
      */
-    public Menu(String title, MenuSize size, Player player) {
+    public Menu(String title, MenuSize size, Player player, MenuHandler handler) {
+        this.title = title;
+        this.rows = size.getRows();
+        this.player = player;
+        this.handler = handler;
+
         if (this.handler == null) {
             throw new IllegalStateException("No menu handler instance found.");
         }
 
-        this.player = player;
-        this.rows = size.getRows();
-
-        this.foreground = new ForegroundLayer(this);
-        this.background = new BackgroundLayer(this);
-
-        this.title = Color.translate(title);
         this.inventory = Bukkit.createInventory(player, getTotalSlots(), this.title);
-
         this.async = getClass().isAnnotationPresent(Async.class);
+    }
+
+    /**
+     * Creates a new menu, initializing the underlying bukkit inventory.
+     *
+     * @param title The title, auto translated.
+     * @param size The menu size, in rows.
+     * @param player The player to open the menu with.
+     */
+    public Menu(String title, MenuSize size, Player player) {
+        this(title, size, player, MenuHandler.getInstance());
     }
 
     /**
