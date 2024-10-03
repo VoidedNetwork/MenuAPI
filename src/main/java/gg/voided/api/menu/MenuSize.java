@@ -14,16 +14,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum MenuSize {
     /**
-     * A menu with one row.
-     */
-    ONE(1),
-
-    /**
-     * A menu with two rows.
-     */
-    TWO(2),
-
-    /**
      * A menu with three rows.
      */
     THREE(3),
