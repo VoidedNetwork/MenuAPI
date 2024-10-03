@@ -162,7 +162,7 @@ public abstract class Menu {
         // This will schedule at most 1 task using the bukkit scheduler.
         // Usually none, except when the menu is async or the menu is
         // sync and opened not on the server thread.
-        handler.runTask(() -> {
+        handler.schedule(() -> {
             if (!setup) {
                 setup(background, foreground);
                 setup = true;
@@ -170,7 +170,7 @@ public abstract class Menu {
 
             refresh();
 
-            handler.runSync(() -> {
+            handler.schedule(() -> {
                 Menu existing = handler.getOpenMenus().get(player);
 
                 if (existing == null) {
@@ -181,7 +181,7 @@ public abstract class Menu {
 
                 player.openInventory(inventory);
                 handler.getOpenMenus().put(player, this);
-                handler.runAsync(this::onOpen, async);
+                handler.run(this::onOpen, async);
             });
         }, async);
     }
@@ -197,7 +197,7 @@ public abstract class Menu {
         }
 
         handler.getOpenMenus().remove(player, this);
-        handler.runAsync(this::onClose, async);
+        handler.run(this::onClose, async);
     }
 
     /**
@@ -218,7 +218,7 @@ public abstract class Menu {
         buttons.putAll(foreground.getButtons(icons));
         buttons.putAll(background.getButtons(icons));
 
-        handler.runSync(() -> {
+        handler.schedule(() -> {
             inventory.setContents(icons);
             player.updateInventory();
         });
@@ -228,7 +228,7 @@ public abstract class Menu {
      * Updates the inventory buttons shown in the menu.
      */
     public void update() {
-        handler.runTask(this::refresh, async);
+        handler.schedule(this::refresh, async);
     }
 
     /**
@@ -262,7 +262,7 @@ public abstract class Menu {
      * @param event The inventory click event.
      */
     public void click(InventoryClickEvent event) {
-        handler.runTask(() -> {
+        handler.schedule(() -> {
             Button button = buttons.get(event.getSlot());
             ButtonClick click = new ButtonClick(event, button, this);
 

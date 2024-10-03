@@ -98,25 +98,11 @@ public class MenuHandler {
      *
      * @param task The task to run.
      */
-    protected void runSync(Runnable task) {
+    protected void schedule(Runnable task) {
         if (Bukkit.isPrimaryThread()) {
             task.run();
         } else {
             Bukkit.getScheduler().runTask(plugin, task);
-        }
-    }
-
-    /**
-     * Runs a task asynchronously.
-     *
-     * @param task The task to run.
-     * @param async If the task should be run asynchronously.
-     */
-    protected void runAsync(Runnable task, boolean async) {
-        if (async) {
-            CompletableFuture.runAsync(task);
-        } else {
-            task.run();
         }
     }
 
@@ -126,11 +112,25 @@ public class MenuHandler {
      * @param task The task to run.
      * @param async If the task should be run asynchronously.
      */
-    protected void runTask(Runnable task, boolean async) {
+    protected void schedule(Runnable task, boolean async) {
         if (async) {
             CompletableFuture.runAsync(task);
         } else {
-            runSync(task);
+            schedule(task);
+        }
+    }
+
+    /**
+     * Runs a task asynchronously.
+     *
+     * @param task The task to run.
+     * @param async If the task should be run asynchronously.
+     */
+    protected void run(Runnable task, boolean async) {
+        if (async) {
+            CompletableFuture.runAsync(task);
+        } else {
+            task.run();
         }
     }
 }
