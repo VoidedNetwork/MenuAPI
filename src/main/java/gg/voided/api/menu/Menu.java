@@ -6,7 +6,6 @@ import gg.voided.api.menu.button.ButtonClick;
 import gg.voided.api.menu.layer.impl.BackgroundLayer;
 import gg.voided.api.menu.layer.impl.ForegroundLayer;
 import gg.voided.api.menu.template.Template;
-import gg.voided.api.menu.utils.Color;
 import gg.voided.api.menu.utils.Position;
 import lombok.Getter;
 import lombok.Setter;
