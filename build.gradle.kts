@@ -11,7 +11,7 @@ object Project {
     const val NAME = "MenuAPI"
     const val GROUP = "net.j4c0b3y"
     const val AUTHOR = "J4C0B3Y"
-    const val VERSION = "1.3"
+    const val VERSION = "1.3.0"
 }
 
 repositories {
@@ -24,6 +24,8 @@ dependencies {
 }
 
 java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
     withSourcesJar()
 }
 
@@ -41,9 +43,24 @@ tasks {
     register("install") {
         dependsOn(named("publishReleasePublicationToMavenLocal"))
     }
+
+    named<JavaCompile>("compileJava") {
+        options.encoding = "UTF-8"
+    }
 }
 
 publishing {
+    repositories {
+        maven {
+            name = "j4c0b3yPublic"
+            url = uri("https://repo.j4c0b3y.net/public")
+            credentials(PasswordCredentials::class)
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+        }
+    }
+
     publications {
         create<MavenPublication>("release") {
             artifactId = Project.NAME
