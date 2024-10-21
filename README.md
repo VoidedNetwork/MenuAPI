@@ -32,25 +32,25 @@ Replace `VERSION` with the latest release version on GitHub.
 
 ```kts
 repositories {
-    maven("https://jitpack.io")
+    maven("https://repo.j4c0b3y.net/public/")
 }
 
 dependencies {
-    implementation("com.github.VoidedNetwork:MenuAPI:VERSION")
+    implementation("net.j4c0b3y:MenuAPI:VERSION")
 }
 ```
 
 ```xml
 <repositories>
     <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
+        <id>j4c0b3y-public</id>
+        <url>https://repo.j4c0b3y.net/public/</url>
     </repository>
 </repositories>
 
 <dependencies>
     <dependency>
-        <groupId>com.github.VoidedNetwork</groupId>
+        <groupId>net.j4c0b3y</groupId>
         <artifactId>MenuAPI</artifactId>
         <version>VERSION</version>
     </dependency>
