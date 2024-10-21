@@ -1,7 +1,7 @@
-package gg.voided.api.menu.listener;
+package net.j4c0b3y.api.menu.listener;
 
-import gg.voided.api.menu.Menu;
-import gg.voided.api.menu.MenuHandler;
+import net.j4c0b3y.api.menu.Menu;
+import net.j4c0b3y.api.menu.MenuHandler;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

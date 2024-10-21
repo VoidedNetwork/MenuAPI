@@ -1,6 +1,6 @@
-package gg.voided.api.menu.button;
+package net.j4c0b3y.api.menu.button;
 
-import gg.voided.api.menu.Menu;
+import net.j4c0b3y.api.menu.Menu;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

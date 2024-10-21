@@ -1,4 +1,4 @@
-package gg.voided.api.menu.annotation;
+package net.j4c0b3y.api.menu.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

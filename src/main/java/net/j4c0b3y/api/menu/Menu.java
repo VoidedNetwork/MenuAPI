@@ -1,12 +1,12 @@
-package gg.voided.api.menu;
+package net.j4c0b3y.api.menu;
 
-import gg.voided.api.menu.annotation.Async;
-import gg.voided.api.menu.button.Button;
-import gg.voided.api.menu.button.ButtonClick;
-import gg.voided.api.menu.layer.impl.BackgroundLayer;
-import gg.voided.api.menu.layer.impl.ForegroundLayer;
-import gg.voided.api.menu.template.Template;
-import gg.voided.api.menu.utils.Position;
+import net.j4c0b3y.api.menu.annotation.Async;
+import net.j4c0b3y.api.menu.button.Button;
+import net.j4c0b3y.api.menu.button.ButtonClick;
+import net.j4c0b3y.api.menu.layer.impl.BackgroundLayer;
+import net.j4c0b3y.api.menu.layer.impl.ForegroundLayer;
+import net.j4c0b3y.api.menu.template.Template;
+import net.j4c0b3y.api.menu.utils.Position;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;

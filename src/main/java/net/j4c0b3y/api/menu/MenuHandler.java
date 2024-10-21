@@ -1,8 +1,8 @@
-package gg.voided.api.menu;
+package net.j4c0b3y.api.menu;
 
 
-import gg.voided.api.menu.listener.InventoryListener;
-import gg.voided.api.menu.task.AutoUpdateTask;
+import net.j4c0b3y.api.menu.listener.InventoryListener;
+import net.j4c0b3y.api.menu.task.AutoUpdateTask;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;

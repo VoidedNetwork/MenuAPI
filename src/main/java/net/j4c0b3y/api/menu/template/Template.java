@@ -1,7 +1,7 @@
-package gg.voided.api.menu.template;
+package net.j4c0b3y.api.menu.template;
 
-import gg.voided.api.menu.layer.impl.BackgroundLayer;
-import gg.voided.api.menu.layer.impl.ForegroundLayer;
+import net.j4c0b3y.api.menu.layer.impl.BackgroundLayer;
+import net.j4c0b3y.api.menu.layer.impl.ForegroundLayer;
 
 /**
  * Used to apply a reusable design preset to a menus layers.

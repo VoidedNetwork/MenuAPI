@@ -1,4 +1,4 @@
-package gg.voided.api.menu.button;
+package net.j4c0b3y.api.menu.button;
 
 import org.bukkit.inventory.ItemStack;
 

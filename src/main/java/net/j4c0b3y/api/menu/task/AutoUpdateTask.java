@@ -1,8 +1,8 @@
-package gg.voided.api.menu.task;
+package net.j4c0b3y.api.menu.task;
 
-import gg.voided.api.menu.Menu;
-import gg.voided.api.menu.MenuHandler;
-import gg.voided.api.menu.annotation.AutoUpdate;
+import net.j4c0b3y.api.menu.Menu;
+import net.j4c0b3y.api.menu.MenuHandler;
+import net.j4c0b3y.api.menu.annotation.AutoUpdate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

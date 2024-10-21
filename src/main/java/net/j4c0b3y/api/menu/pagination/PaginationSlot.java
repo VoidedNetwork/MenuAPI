@@ -1,7 +1,7 @@
-package gg.voided.api.menu.pagination;
+package net.j4c0b3y.api.menu.pagination;
 
-import gg.voided.api.menu.button.Button;
-import gg.voided.api.menu.button.ButtonClick;
+import net.j4c0b3y.api.menu.button.Button;
+import net.j4c0b3y.api.menu.button.ButtonClick;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.inventory.ItemStack;

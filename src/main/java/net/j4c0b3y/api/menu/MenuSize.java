@@ -1,4 +1,4 @@
-package gg.voided.api.menu;
+package net.j4c0b3y.api.menu;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

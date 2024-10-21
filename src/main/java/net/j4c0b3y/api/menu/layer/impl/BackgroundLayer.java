@@ -1,9 +1,9 @@
-package gg.voided.api.menu.layer.impl;
+package net.j4c0b3y.api.menu.layer.impl;
 
-import gg.voided.api.menu.Menu;
-import gg.voided.api.menu.button.Button;
-import gg.voided.api.menu.layer.Layer;
-import gg.voided.api.menu.pagination.PaginationSlot;
+import net.j4c0b3y.api.menu.Menu;
+import net.j4c0b3y.api.menu.button.Button;
+import net.j4c0b3y.api.menu.layer.Layer;
+import net.j4c0b3y.api.menu.pagination.PaginationSlot;
 
 import java.util.HashMap;
 

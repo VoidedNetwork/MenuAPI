@@ -1,8 +1,8 @@
-package gg.voided.api.menu.pagination;
+package net.j4c0b3y.api.menu.pagination;
 
-import gg.voided.api.menu.Menu;
-import gg.voided.api.menu.MenuSize;
-import gg.voided.api.menu.button.Button;
+import net.j4c0b3y.api.menu.Menu;
+import net.j4c0b3y.api.menu.MenuSize;
+import net.j4c0b3y.api.menu.button.Button;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
